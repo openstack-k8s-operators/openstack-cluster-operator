@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openstack-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: openstack-cluster
+  template:
+    metadata:
+      labels:
+        name: openstack-cluster
+    spec:
+      serviceAccountName: openstack-cluster
+      containers:
+        - name: openstack-cluster
+          # Replace this with the built image name
+          image: REPLACE_IMAGE
+          command:
+          - openstack-cluster
+          imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "openstack-cluster"
