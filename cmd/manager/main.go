@@ -13,9 +13,9 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	"k8s.io/client-go/rest"
 
-	"github.com/openstack-k8s-operators/openstack-cluster/openstack-cluster/pkg/apis"
-	"github.com/openstack-k8s-operators/openstack-cluster/openstack-cluster/pkg/controller"
-	"github.com/openstack-k8s-operators/openstack-cluster/openstack-cluster/version"
+	"github.com/openstack-k8s-operators/openstack-cluster-operator/pkg/apis"
+	"github.com/openstack-k8s-operators/openstack-cluster-operator/pkg/controller"
+	"github.com/openstack-k8s-operators/openstack-cluster-operator/version"
 
 	"github.com/operator-framework/operator-sdk/pkg/k8sutil"
 	kubemetrics "github.com/operator-framework/operator-sdk/pkg/kube-metrics"
