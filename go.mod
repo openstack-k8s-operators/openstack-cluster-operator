@@ -1,9 +1,9 @@
-module github.com/openstack-k8s-operators/openstack-cluster/openstack-cluster
+module github.com/openstack-k8s-operators/openstack-cluster-operator
 
 go 1.13
 
 require (
-	github.com/operator-framework/operator-sdk v0.17.1-0.20200428162440-709ecfe37242
+	github.com/operator-framework/operator-sdk v0.17.0
 	github.com/spf13/pflag v1.0.5
 	k8s.io/api v0.17.4
 	k8s.io/apimachinery v0.17.4

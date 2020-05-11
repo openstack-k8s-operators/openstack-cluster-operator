@@ -1,0 +1,7 @@
+apiVersion: openstackcluster.openstack.org/v1
+kind: OpenStackCluster
+metadata:
+  name: example-openstackcluster
+spec:
+  # Add fields here
+  size: 3

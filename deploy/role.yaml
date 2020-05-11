@@ -1,7 +1,8 @@
-kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
 metadata:
-  name: openstack-cluster
+  creationTimestamp: null
+  name: openstack-cluster-operator
 rules:
 - apiGroups:
   - ""
@@ -42,16 +43,16 @@ rules:
   resources:
   - servicemonitors
   verbs:
-  - "get"
-  - "create"
+  - get
+  - create
 - apiGroups:
   - apps
+  resourceNames:
+  - openstack-cluster-operator
   resources:
   - deployments/finalizers
-  resourceNames:
-  - openstack-cluster
   verbs:
-  - "update"
+  - update
 - apiGroups:
   - ""
   resources:
@@ -65,3 +66,15 @@ rules:
   - deployments
   verbs:
   - get
+- apiGroups:
+  - openstackcluster.openstack.org
+  resources:
+  - '*'
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
