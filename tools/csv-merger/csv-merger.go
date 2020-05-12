@@ -42,10 +42,9 @@ import (
 
 const operatorName = "openstack-cluster-operator"
 
-const CSVMode = "CSV"
-const CRDMode = "CRDs"
+const csvMode = "CSV"
 
-var validOutputModes = []string{CSVMode, CRDMode}
+var validOutputModes = []string{csvMode}
 
 // TODO: get rid of this once RelatedImages officially
 // appears in github.com/operator-framework/operator-lifecycle-manager/pkg/api/apis/operators
@@ -54,21 +53,21 @@ type relatedImage struct {
 	Ref  string `json:"image"`
 }
 
-type ClusterServiceVersionSpecExtended struct {
+type clusterServiceVersionSpecExtended struct {
 	csvv1alpha1.ClusterServiceVersionSpec
 	RelatedImages []relatedImage `json:"relatedImages,omitempty"`
 }
 
-type ClusterServiceVersionExtended struct {
+type clusterServiceVersionExtended struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata"`
 
-	Spec   ClusterServiceVersionSpecExtended       `json:"spec"`
+	Spec   clusterServiceVersionSpecExtended       `json:"spec"`
 	Status csvv1alpha1.ClusterServiceVersionStatus `json:"status"`
 }
 
 var (
-	outputMode          = flag.String("output-mode", CSVMode, "Working mode: "+strings.Join(validOutputModes, "|"))
+	outputMode          = flag.String("output-mode", csvMode, "Working mode: "+strings.Join(validOutputModes, "|"))
 	novaCsv             = flag.String("nova-csv", "", "Nova CSV string")
 	neutronCsv          = flag.String("neutron-csv", "", "Neutron CSV string")
 	computeNodeCsv      = flag.String("compute-node-csv", "", "Compute Node CSV string")
@@ -88,7 +87,7 @@ var (
 	crdDir = flag.String("crds-dir", "", "the directory containing the CRDs for apigroup validation. The validation will be performed if and only if the value is non-empty.")
 )
 
-func IOReadDir(root string) ([]string, error) {
+func ioReadDir(root string) ([]string, error) {
 	var files []string
 	fileInfo, err := ioutil.ReadDir(root)
 	if err != nil {
@@ -110,12 +109,12 @@ func stringInSlice(a string, list []string) bool {
 	return false
 }
 
-func validateNoApiOverlap(crdDir string) bool {
+func validateNoAPIOverlap(crdDir string) bool {
 	var (
 		crdFiles []string
 		err      error
 	)
-	crdFiles, err = IOReadDir(crdDir)
+	crdFiles, err = ioReadDir(crdDir)
 	if err != nil {
 		panic(err)
 	}
@@ -187,7 +186,7 @@ func main() {
 	flag.Parse()
 
 	if *crdDir != "" {
-		result := validateNoApiOverlap(*crdDir)
+		result := validateNoAPIOverlap(*crdDir)
 		if result {
 			os.Exit(0)
 		} else {
@@ -196,7 +195,7 @@ func main() {
 	}
 
 	switch *outputMode {
-	case CSVMode:
+	case csvMode:
 		if *specDisplayName == "" || *specDescription == "" {
 			panic(errors.New("Must specify spec-displayname and spec-description"))
 		}
@@ -224,10 +223,10 @@ func main() {
 			version,
 			*crdDisplay,
 		)
-		csvExtended := ClusterServiceVersionExtended{
+		csvExtended := clusterServiceVersionExtended{
 			TypeMeta:   csvBase.TypeMeta,
 			ObjectMeta: csvBase.ObjectMeta,
-			Spec:       ClusterServiceVersionSpecExtended{ClusterServiceVersionSpec: csvBase.Spec},
+			Spec:       clusterServiceVersionSpecExtended{ClusterServiceVersionSpec: csvBase.Spec},
 			Status:     csvBase.Status}
 
 		// This is the base deployment + rbac for the OpenStack Cluster CSV
@@ -241,9 +240,9 @@ func main() {
 			if image != "" {
 				name := ""
 				if strings.Contains(image, "|") {
-					image_s := strings.Split(image, "|")
-					image = image_s[0]
-					name = image_s[1]
+					imageSplit := strings.Split(image, "|")
+					image = imageSplit[0]
+					name = imageSplit[1]
 				} else {
 					names := strings.Split(strings.Split(image, "@")[0], "/")
 					name = names[len(names)-1]
@@ -285,53 +284,53 @@ func main() {
 					)
 				}
 
-				csv_base_alm_string := csvExtended.Annotations["alm-examples"]
-				csv_struct_alm_string := csvStruct.Annotations["alm-examples"]
-				var base_almcrs []interface{}
-				var struct_almcrs []interface{}
-				if err = json.Unmarshal([]byte(csv_base_alm_string), &base_almcrs); err != nil {
+				csvBaseAlmString := csvExtended.Annotations["alm-examples"]
+				csvStructAlmString := csvStruct.Annotations["alm-examples"]
+				var baseAlmCrs []interface{}
+				var structAlmCrs []interface{}
+				if err = json.Unmarshal([]byte(csvBaseAlmString), &baseAlmCrs); err != nil {
 					panic(err)
 				}
-				if err = json.Unmarshal([]byte(csv_struct_alm_string), &struct_almcrs); err == nil {
+				if err = json.Unmarshal([]byte(csvStructAlmString), &structAlmCrs); err == nil {
 					//panic(err)
-					for _, cr := range struct_almcrs {
-						base_almcrs = append(
-							base_almcrs,
+					for _, cr := range structAlmCrs {
+						baseAlmCrs = append(
+							baseAlmCrs,
 							cr,
 						)
 					}
 				}
-				alm_b, err := json.Marshal(base_almcrs)
+				almB, err := json.Marshal(baseAlmCrs)
 				if err != nil {
 					panic(err)
 				}
-				csvExtended.Annotations["alm-examples"] = string(alm_b)
+				csvExtended.Annotations["alm-examples"] = string(almB)
 
 			}
 		}
 
-		hidden_crds := []string{}
-		visible_crds := strings.Split(*visibleCRDList, ",")
+		hiddenCrds := []string{}
+		visibleCrds := strings.Split(*visibleCRDList, ",")
 		for _, owned := range csvExtended.Spec.CustomResourceDefinitions.Owned {
 			found := false
-			for _, name := range visible_crds {
+			for _, name := range visibleCrds {
 				if owned.Name == name {
 					found = true
 				}
 			}
 			if !found {
-				hidden_crds = append(
-					hidden_crds,
+				hiddenCrds = append(
+					hiddenCrds,
 					owned.Name,
 				)
 			}
 		}
 
-		hidden_crds_j, err := json.Marshal(hidden_crds)
+		hiddenCrdsJ, err := json.Marshal(hiddenCrds)
 		if err != nil {
 			panic(err)
 		}
-		csvExtended.Annotations["operators.operatorframework.io/internal-objects"] = string(hidden_crds_j)
+		csvExtended.Annotations["operators.operatorframework.io/internal-objects"] = string(hiddenCrdsJ)
 
 		csvExtended.Spec.InstallStrategy.StrategyName = "deployment"
 		csvExtended.Spec.InstallStrategy = csvv1alpha1.NamedInstallStrategy{
@@ -352,7 +351,7 @@ func main() {
 		if *csvOverrides != "" {
 			csvOBytes := []byte(*csvOverrides)
 
-			csvO := &ClusterServiceVersionExtended{}
+			csvO := &clusterServiceVersionExtended{}
 
 			err := yaml.Unmarshal(csvOBytes, csvO)
 			if err != nil {

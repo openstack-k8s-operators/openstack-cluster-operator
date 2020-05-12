@@ -16,23 +16,7 @@ import (
 
 const openstackClusterName = "openstack-cluster-operator"
 
-func GetDeployment(namespace, image, imagePullPolicy string) appsv1.Deployment {
-	return appsv1.Deployment{
-		TypeMeta: metav1.TypeMeta{
-			APIVersion: "apps/v1",
-			Kind:       "Deployment",
-		},
-		ObjectMeta: metav1.ObjectMeta{
-			Name: openstackClusterName,
-			Labels: map[string]string{
-				"name": openstackClusterName,
-			},
-		},
-		Spec: GetDeploymentSpec(namespace, image, imagePullPolicy),
-	}
-}
-
-func GetDeploymentSpec(namespace, image, imagePullPolicy string) appsv1.DeploymentSpec {
+func getDeploymentSpec(namespace, image, imagePullPolicy string) appsv1.DeploymentSpec {
 	return appsv1.DeploymentSpec{
 		Replicas: int32Ptr(1),
 		Selector: &metav1.LabelSelector{
@@ -100,6 +84,7 @@ func GetDeploymentSpec(namespace, image, imagePullPolicy string) appsv1.Deployme
 	}
 }
 
+// GetClusterPermissions returns the cluster policy rules
 func GetClusterPermissions() []rbacv1.PolicyRule {
 	return []rbacv1.PolicyRule{
 		{
@@ -258,12 +243,13 @@ func GetClusterPermissions() []rbacv1.PolicyRule {
 	}
 }
 
+// GetInstallStrategyBase returns the cluster base strategy
 func GetInstallStrategyBase(namespace, image, imagePullPolicy string) csvv1alpha1.StrategyDetailsDeployment {
 	return csvv1alpha1.StrategyDetailsDeployment{
 		DeploymentSpecs: []csvv1alpha1.StrategyDeploymentSpec{
 			csvv1alpha1.StrategyDeploymentSpec{
 				Name: "openstack-cluster-operator",
-				Spec: GetDeploymentSpec(namespace, image, imagePullPolicy),
+				Spec: getDeploymentSpec(namespace, image, imagePullPolicy),
 			},
 		},
 		Permissions: []csvv1alpha1.StrategyDeploymentPermissions{},
