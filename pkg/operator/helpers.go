@@ -303,8 +303,9 @@ func GetCSVBase(name, namespace, displayName, description, image, replaces strin
 			DisplayName: displayName,
 			Description: description,
 			Keywords:    []string{"OpenStack"},
-			Version:     csvVersion.OperatorVersion{version},
-			Replaces:    replaces,
+			Version: csvVersion.OperatorVersion{
+				Version: version},
+			Replaces: replaces,
 			Maintainers: []csvv1alpha1.Maintainer{
 				csvv1alpha1.Maintainer{
 					Name:  "OpenStack K8s",
