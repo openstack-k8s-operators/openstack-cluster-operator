@@ -4,9 +4,11 @@
 # NOTE: this script assumes you have configured your OpenShift registry with a default route so that it is easy to push images locally
 set -ex
 BUNDLE_VERSION=${BUNDLE_VERSION:-"0.0.1"}
-INDEX_VERSION="0.0.1"
+INDEX_VERSION=${INDEX_VERSION:-"0.0.1"}
 PROJECT=${PROJECT:-"openstack"}
 IMAGE_REGISTRY=$(oc get route -n openshift-image-registry -o json | jq ".items[0].spec.host" -r)
+
+if ! oc project | grep "$PROJECT" &> /dev/null; then echo "run this script in the project: $PROJECT"; exit 1; fi
 
 ACCOUNT=$(oc get secret | grep builder-dockercfg | cut -f 1 -d ' ')
 TOKEN=$(oc get secret $ACCOUNT -o json | jq '.metadata.annotations["openshift.io/token-secret.value"]' -r)
