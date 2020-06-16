@@ -11,7 +11,7 @@ set -ex
 # Versions can be passed into these utilities to control the
 # container images that get used.
 
-# These resulting individual component CSV's are then merge
+# These resulting individual component CSV's are then merged
 # into an "openstack-cluster" using the csv-merge tool in this
 # project. This generates the final (completed) CSV containing
 # all the needed settings to install each operator.
