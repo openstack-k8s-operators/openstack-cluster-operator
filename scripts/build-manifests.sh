@@ -26,7 +26,7 @@ PROJECT_ROOT="$(readlink -e $(dirname "$BASH_SOURCE[0]")/../)"
 # REPLACES_VERSION is the old CSV_VERSION
 #   if REPLACES_VERSION == "" it will be ignored
 REPLACES_CSV_VERSION="${REPLACES_VERSION:-}"
-CSV_VERSION="${CSV_VERSION:-0.0.1}"
+CSV_VERSION="${CSV_VERSION:-0.0.4}"
 CONTAINER_BUILD_CMD="${CONTAINER_BUILD_CMD:-podman}"
 
 DEPLOY_DIR="${PROJECT_ROOT}/deploy"
@@ -35,13 +35,13 @@ CSV_DIR="${DEPLOY_DIR}/olm-catalog/openstack-cluster/${CSV_VERSION}"
 
 OPERATOR_NAME="${NAME:-openstack-cluster-operator}"
 OPERATOR_NAMESPACE="${NAMESPACE:-openstack-cluster-operator}"
-OPERATOR_IMAGE="${OPERATOR_IMAGE:-quay.io/dprince/openstack-cluster-operator:v0.0.1}"
+OPERATOR_IMAGE="${OPERATOR_IMAGE:-quay.io/openstack-k8s-operators/openstack-cluster-operator:v0.0.1}"
 IMAGE_PULL_POLICY="${IMAGE_PULL_POLICY:-IfNotPresent}"
 
 # Component Images
-NOVA_IMAGE="${NOVA_IMAGE:-quay.io/dprince/nova-operator:v0.0.1}"
-NEUTRON_IMAGE="${NEUTRON_IMAGE:-quay.io/dprince/neutron-operator:v0.0.1}"
-COMPUTE_WORKER_IMAGE="${COMPUTE_WORKER_IMAGE:-quay.io/dprince/compute-node-operator:v0.0.1}"
+NOVA_IMAGE="${NOVA_IMAGE:-quay.io/openstack-k8s-operators/nova-operator:v0.0.3}"
+NEUTRON_IMAGE="${NEUTRON_IMAGE:-quay.io/openstack-k8s-operators/neutron-operator:v0.0.2}"
+COMPUTE_WORKER_IMAGE="${COMPUTE_WORKER_IMAGE:-quay.io/openstack-k8s-operators/compute-node-operator:v0.0.2}"
 
 # Important extensions
 CSV_EXT="clusterserviceversion.yaml"
