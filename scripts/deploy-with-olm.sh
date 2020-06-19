@@ -20,9 +20,10 @@ fi
 echo "Wait for the catalogSource to be available"
 oc wait deploy "openstack-index" --for condition=available -n openstack --timeout="360s"
 
-RETRIES="${RETRIES:-10}"
+echo "Waiting for packagemanifest 'openstack-cluster' to be created in namespace 'openstack'"
+sleep 10
+RETRIES="${RETRIES:-20}"
 for i in $(seq 1 $RETRIES); do
-    echo "Waiting for packagemanifest 'openstack-cluster' to be created in namespace 'openstack'..."
     oc get packagemanifest -n "openstack" "openstack-cluster" && break
     sleep $i
     if [ "$i" -eq "${RETRIES}" ]; then
