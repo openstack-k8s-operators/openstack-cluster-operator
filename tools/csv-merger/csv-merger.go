@@ -71,6 +71,7 @@ var (
 	novaCsv             = flag.String("nova-csv", "", "Nova CSV string")
 	neutronCsv          = flag.String("neutron-csv", "", "Neutron CSV string")
 	computeNodeCsv      = flag.String("compute-node-csv", "", "Compute Node CSV string")
+	keystoneCsv         = flag.String("keystone-csv", "", "Keystone CSV string")
 	operatorImage       = flag.String("operator-image-name", "", "OpenStack Cluster Operator image")
 	csvVersion          = flag.String("csv-version", "", "CSV version")
 	replacesCsvVersion  = flag.String("replaces-csv-version", "", "CSV version to replace")
@@ -204,6 +205,7 @@ func main() {
 			*novaCsv,
 			*neutronCsv,
 			*computeNodeCsv,
+			*keystoneCsv,
 		}
 
 		version := semver.MustParse(*csvVersion)

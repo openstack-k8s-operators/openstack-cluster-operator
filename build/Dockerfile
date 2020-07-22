@@ -7,6 +7,7 @@ ENV OPERATOR=/usr/local/bin/openstack-cluster-operator \
 
 # install operator binary
 COPY build/_output/bin/openstack-cluster-operator ${OPERATOR}
+COPY build/_output/csv-merger /usr/local/bin/csv-merger
 
 COPY build/bin /usr/local/bin
 RUN  /usr/local/bin/user_setup

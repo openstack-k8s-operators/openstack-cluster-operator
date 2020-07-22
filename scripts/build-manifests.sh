@@ -40,8 +40,9 @@ IMAGE_PULL_POLICY="${IMAGE_PULL_POLICY:-IfNotPresent}"
 
 # Component Images
 NOVA_IMAGE="${NOVA_IMAGE:-quay.io/openstack-k8s-operators/nova-operator:v0.0.3}"
-NEUTRON_IMAGE="${NEUTRON_IMAGE:-quay.io/openstack-k8s-operators/neutron-operator:v0.0.2}"
-COMPUTE_WORKER_IMAGE="${COMPUTE_WORKER_IMAGE:-quay.io/openstack-k8s-operators/compute-node-operator:v0.0.2}"
+NEUTRON_IMAGE="${NEUTRON_IMAGE:-quay.io/openstack-k8s-operators/neutron-operator:v0.0.3}"
+COMPUTE_WORKER_IMAGE="${COMPUTE_WORKER_IMAGE:-quay.io/openstack-k8s-operators/compute-node-operator:v0.0.3}"
+KEYSTONE_IMAGE="${KEYSTONE_IMAGE:-quay.io/openstack-k8s-operators/keystone-operator:v0.0.2}"
 
 # Important extensions
 CSV_EXT="clusterserviceversion.yaml"
@@ -125,11 +126,25 @@ function create_compute_node_csv() {
   echo "${operatorName}"
 }
 
+function create_keystone_csv() {
+  local operatorName="keystone"
+  local imagePullUrl="${KEYSTONE_IMAGE}"
+  local operatorArgs=" \
+    --namespace=${OPERATOR_NAMESPACE} \
+    --csv-version=${CSV_VERSION} \
+    --operator-image-name=${KEYSTONE_IMAGE}
+  "
+
+  gen_csv ${operatorName} ${imagePullUrl} ${operatorArgs}
+  echo "${operatorName}"
+}
+
 TEMPDIR=$(mktemp -d) || (echo "Failed to create temp directory" && exit 1)
 pushd $TEMPDIR
 novaCsv="${TEMPDIR}/$(create_nova_csv).${CSV_EXT}"
 neutronCsv="${TEMPDIR}/$(create_neutron_csv).${CSV_EXT}"
 computeNodeCsv="${TEMPDIR}/$(create_compute_node_csv).${CSV_EXT}"
+keystoneCsv="${TEMPDIR}/$(create_keystone_csv).${CSV_EXT}"
 csvOverrides="${TEMPDIR}/csv_overrides.${CSV_EXT}"
 cat > ${csvOverrides} <<- EOM
 ---
@@ -156,6 +171,7 @@ ${PROJECT_ROOT}/build/_output/csv-merger \
   --nova-csv="$(<${novaCsv})" \
   --neutron-csv="$(<${neutronCsv})" \
   --compute-node-csv="$(<${computeNodeCsv})" \
+  --keystone-csv="$(<${keystoneCsv})" \
   --csv-version=${CSV_VERSION} \
   --replaces-csv-version=${REPLACES_CSV_VERSION} \
   --spec-displayname="OpenStack Cluster Operator" \
@@ -169,5 +185,6 @@ copy_deployment_specs "openstack-cluster-operator" "${OPERATOR_IMAGE}" "$CSV_DIR
 copy_deployment_specs "nova-operator" "${NOVA_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "neutron-operator" "${NEUTRON_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "compute-node-operator" "${COMPUTE_WORKER_IMAGE}" "$CSV_DIR"
+copy_deployment_specs "keystone-operator" "${KEYSTONE_IMAGE}" "$CSV_DIR"
 
 rm -rf ${TEMPDIR}
