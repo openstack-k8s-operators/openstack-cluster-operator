@@ -72,6 +72,7 @@ var (
 	neutronCsv          = flag.String("neutron-csv", "", "Neutron CSV string")
 	computeNodeCsv      = flag.String("compute-node-csv", "", "Compute Node CSV string")
 	keystoneCsv         = flag.String("keystone-csv", "", "Keystone CSV string")
+	heatCsv             = flag.String("heat-csv", "", "Heat CSV string")
 	operatorImage       = flag.String("operator-image-name", "", "OpenStack Cluster Operator image")
 	csvVersion          = flag.String("csv-version", "", "CSV version")
 	replacesCsvVersion  = flag.String("replaces-csv-version", "", "CSV version to replace")
@@ -206,6 +207,7 @@ func main() {
 			*neutronCsv,
 			*computeNodeCsv,
 			*keystoneCsv,
+			*heatCsv,
 		}
 
 		version := semver.MustParse(*csvVersion)

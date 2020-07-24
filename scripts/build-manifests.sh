@@ -43,6 +43,7 @@ NOVA_IMAGE="${NOVA_IMAGE:-quay.io/openstack-k8s-operators/nova-operator:v0.0.3}"
 NEUTRON_IMAGE="${NEUTRON_IMAGE:-quay.io/openstack-k8s-operators/neutron-operator:v0.0.3}"
 COMPUTE_WORKER_IMAGE="${COMPUTE_WORKER_IMAGE:-quay.io/openstack-k8s-operators/compute-node-operator:v0.0.3}"
 KEYSTONE_IMAGE="${KEYSTONE_IMAGE:-quay.io/openstack-k8s-operators/keystone-operator:v0.0.2}"
+HEAT_IMAGE="${HEAT_IMAGE:-quay.io/openstack-k8s-operators/heat-operator:devel}"
 
 # Important extensions
 CSV_EXT="clusterserviceversion.yaml"
@@ -139,12 +140,26 @@ function create_keystone_csv() {
   echo "${operatorName}"
 }
 
+function create_heat_csv() {
+  local operatorName="heat"
+  local imagePullUrl="${HEAT_IMAGE}"
+  local operatorArgs=" \
+    --namespace=${OPERATOR_NAMESPACE} \
+    --csv-version=${CSV_VERSION} \
+    --operator-image-name=${HEAT_IMAGE}
+  "
+
+  gen_csv ${operatorName} ${imagePullUrl} ${operatorArgs}
+  echo "${operatorName}"
+}
+
 TEMPDIR=$(mktemp -d) || (echo "Failed to create temp directory" && exit 1)
 pushd $TEMPDIR
 novaCsv="${TEMPDIR}/$(create_nova_csv).${CSV_EXT}"
 neutronCsv="${TEMPDIR}/$(create_neutron_csv).${CSV_EXT}"
 computeNodeCsv="${TEMPDIR}/$(create_compute_node_csv).${CSV_EXT}"
 keystoneCsv="${TEMPDIR}/$(create_keystone_csv).${CSV_EXT}"
+heatCsv="${TEMPDIR}/$(create_heat_csv).${CSV_EXT}"
 csvOverrides="${TEMPDIR}/csv_overrides.${CSV_EXT}"
 cat > ${csvOverrides} <<- EOM
 ---
@@ -172,6 +187,7 @@ ${PROJECT_ROOT}/build/_output/csv-merger \
   --neutron-csv="$(<${neutronCsv})" \
   --compute-node-csv="$(<${computeNodeCsv})" \
   --keystone-csv="$(<${keystoneCsv})" \
+  --heat-csv="$(<${heatCsv})" \
   --csv-version=${CSV_VERSION} \
   --replaces-csv-version=${REPLACES_CSV_VERSION} \
   --spec-displayname="OpenStack Cluster Operator" \
@@ -186,5 +202,6 @@ copy_deployment_specs "nova-operator" "${NOVA_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "neutron-operator" "${NEUTRON_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "compute-node-operator" "${COMPUTE_WORKER_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "keystone-operator" "${KEYSTONE_IMAGE}" "$CSV_DIR"
+copy_deployment_specs "heat-operator" "${HEAT_IMAGE}" "$CSV_DIR"
 
 rm -rf ${TEMPDIR}
