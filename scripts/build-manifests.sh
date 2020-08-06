@@ -202,7 +202,6 @@ ${PROJECT_ROOT}/build/_output/csv-merger \
   --neutron-csv="$(<${neutronCsv})" \
   --compute-node-csv="$(<${computeNodeCsv})" \
   --keystone-csv="$(<${keystoneCsv})" \
-  --heat-csv="$(<${heatCsv})" \
   --mariadb-csv="$(<${mariadbCsv})" \
   --csv-version=${CSV_VERSION} \
   --replaces-csv-version=${REPLACES_CSV_VERSION} \
@@ -218,7 +217,6 @@ copy_deployment_specs "nova-operator" "${NOVA_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "neutron-operator" "${NEUTRON_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "compute-node-operator" "${COMPUTE_WORKER_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "keystone-operator" "${KEYSTONE_IMAGE}" "$CSV_DIR"
-copy_deployment_specs "heat-operator" "${HEAT_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "mariadb-operator" "${MARIADB_IMAGE}" "$CSV_DIR"
 
 rm -rf ${TEMPDIR}
