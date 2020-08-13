@@ -44,6 +44,7 @@ NEUTRON_IMAGE="${NEUTRON_IMAGE:-quay.io/openstack-k8s-operators/neutron-operator
 COMPUTE_WORKER_IMAGE="${COMPUTE_WORKER_IMAGE:-quay.io/openstack-k8s-operators/compute-node-operator:v0.0.3}"
 KEYSTONE_IMAGE="${KEYSTONE_IMAGE:-quay.io/openstack-k8s-operators/keystone-operator:v0.0.2}"
 HEAT_IMAGE="${HEAT_IMAGE:-quay.io/openstack-k8s-operators/heat-operator:devel}"
+GLANCE_IMAGE="${GLANCE_IMAGE:-quay.io/openstack-k8s-operators/glance-operator:devel}"
 MARIADB_IMAGE="${MARIADB_IMAGE:-quay.io/openstack-k8s-operators/mariadb-operator:v0.0.1}"
 
 # Important extensions
@@ -154,6 +155,19 @@ function create_heat_csv() {
   echo "${operatorName}"
 }
 
+function create_glance_csv() {
+  local operatorName="glance"
+  local imagePullUrl="${GLANCE_IMAGE}"
+  local operatorArgs=" \
+    --namespace=${OPERATOR_NAMESPACE} \
+    --csv-version=${CSV_VERSION} \
+    --operator-image-name=${GLANCE_IMAGE}
+  "
+
+  gen_csv ${operatorName} ${imagePullUrl} ${operatorArgs}
+  echo "${operatorName}"
+}
+
 function create_mariadb_csv() {
   local operatorName="mariad"
   local imagePullUrl="${MARIADB_IMAGE}"
@@ -175,6 +189,7 @@ computeNodeCsv="${TEMPDIR}/$(create_compute_node_csv).${CSV_EXT}"
 keystoneCsv="${TEMPDIR}/$(create_keystone_csv).${CSV_EXT}"
 heatCsv="${TEMPDIR}/$(create_heat_csv).${CSV_EXT}"
 mariadbCsv="${TEMPDIR}/$(create_mariadb_csv).${CSV_EXT}"
+glanceCsv="${TEMPDIR}/$(create_glance_csv).${CSV_EXT}"
 csvOverrides="${TEMPDIR}/csv_overrides.${CSV_EXT}"
 cat > ${csvOverrides} <<- EOM
 ---
@@ -202,6 +217,7 @@ ${PROJECT_ROOT}/build/_output/csv-merger \
   --neutron-csv="$(<${neutronCsv})" \
   --compute-node-csv="$(<${computeNodeCsv})" \
   --keystone-csv="$(<${keystoneCsv})" \
+  --glance-csv="$(<${glanceCsv})" \
   --mariadb-csv="$(<${mariadbCsv})" \
   --csv-version=${CSV_VERSION} \
   --replaces-csv-version=${REPLACES_CSV_VERSION} \
@@ -218,5 +234,6 @@ copy_deployment_specs "neutron-operator" "${NEUTRON_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "compute-node-operator" "${COMPUTE_WORKER_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "keystone-operator" "${KEYSTONE_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "mariadb-operator" "${MARIADB_IMAGE}" "$CSV_DIR"
+copy_deployment_specs "glance-operator" "${GLANCE_IMAGE}" "$CSV_DIR"
 
 rm -rf ${TEMPDIR}
