@@ -197,7 +197,7 @@ mkdir -p "${CSV_DIR}"
 
   #--spec-description="$(<${PROJECT_ROOT}/docs/operator_description.md)" \
 # Build and merge CSVs
-${PROJECT_ROOT}/build/_output/csv-merger \
+${PROJECT_ROOT}/bin/csv-merger \
   --nova-csv="$(<${novaCsv})" \
   --neutron-csv="$(<${neutronCsv})" \
   --compute-node-csv="$(<${computeNodeCsv})" \
