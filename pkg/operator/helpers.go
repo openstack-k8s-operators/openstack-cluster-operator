@@ -37,20 +37,6 @@ func getDeploymentSpec(namespace, image, imagePullPolicy string) appsv1.Deployme
 						Name:            openstackClusterName,
 						Image:           image,
 						ImagePullPolicy: corev1.PullPolicy(imagePullPolicy),
-						Command:         []string{openstackClusterName},
-						//ReadinessProbe: &corev1.Probe{
-						//	Handler: corev1.Handler{
-						//		Exec: &corev1.ExecAction{
-						//			Command: []string{
-						//				"stat",
-						//				"/tmp/operator-sdk-ready",
-						//			},
-						//		},
-						//	},
-						//	InitialDelaySeconds: 5,
-						//	PeriodSeconds:       5,
-						//	FailureThreshold:    1,
-						//},
 						Env: []corev1.EnvVar{
 							{
 								Name:  "OPERATOR_IMAGE",
@@ -61,10 +47,6 @@ func getDeploymentSpec(namespace, image, imagePullPolicy string) appsv1.Deployme
 								Value: openstackClusterName,
 							},
 							{
-								Name:  "OPERATOR_NAMESPACE",
-								Value: namespace,
-							},
-							{
 								Name: "POD_NAME",
 								ValueFrom: &corev1.EnvVarSource{
 									FieldRef: &corev1.ObjectFieldSelector{
@@ -73,8 +55,12 @@ func getDeploymentSpec(namespace, image, imagePullPolicy string) appsv1.Deployme
 								},
 							},
 							{
-								Name:  "WATCH_NAMESPACE",
-								Value: "",
+								Name: "WATCH_NAMESPACE",
+								ValueFrom: &corev1.EnvVarSource{
+									FieldRef: &corev1.ObjectFieldSelector{
+										FieldPath: "metadata.namespace",
+									},
+								},
 							},
 						},
 					},
@@ -84,20 +70,9 @@ func getDeploymentSpec(namespace, image, imagePullPolicy string) appsv1.Deployme
 	}
 }
 
-// GetClusterPermissions returns the cluster policy rules
-func GetClusterPermissions() []rbacv1.PolicyRule {
-	return []rbacv1.PolicyRule{
-		{
-			APIGroups: []string{
-				"openstackcluster.openstack.org",
-			},
-			Resources: []string{
-				"*",
-			},
-			Verbs: []string{
-				"*",
-			},
-		},
+func getOperatorRules() *[]rbacv1.PolicyRule {
+	return &[]rbacv1.PolicyRule{
+
 		{
 			APIGroups: []string{
 				"",
@@ -106,113 +81,14 @@ func GetClusterPermissions() []rbacv1.PolicyRule {
 				"pods",
 				"services",
 				"services/finalizers",
-				"endpoints",
 				"persistentvolumeclaims",
+				"endpoints",
 				"events",
 				"configmaps",
 				"secrets",
-				"serviceaccounts",
 			},
 			Verbs: []string{
 				"*",
-			},
-		},
-		{
-			APIGroups: []string{
-				"apps",
-			},
-			Resources: []string{
-				"deployments",
-				"deployments/finalizers",
-				"daemonsets",
-				"replicasets",
-			},
-			Verbs: []string{
-				"get",
-				"list",
-				"watch",
-				"create",
-				"delete",
-				"update",
-			},
-		},
-		{
-			APIGroups: []string{
-				"batch",
-			},
-			Resources: []string{
-				"jobs",
-			},
-			Verbs: []string{
-				"get",
-				"list",
-				"watch",
-				"create",
-				"delete",
-			},
-		},
-		{
-			APIGroups: []string{
-				"rbac.authorization.k8s.io",
-			},
-			Resources: []string{
-				"clusterroles",
-				"clusterrolebindings",
-				"roles",
-				"rolebindings",
-			},
-			Verbs: []string{
-				"get",
-				"list",
-				"watch",
-				"create",
-				"delete",
-			},
-		},
-		{
-			APIGroups: []string{
-				"apiextensions.k8s.io",
-			},
-			Resources: []string{
-				"customresourcedefinitions",
-			},
-			Verbs: []string{
-				"get",
-				"list",
-				"watch",
-				"create",
-				"delete",
-				"patch",
-				"update",
-			},
-		},
-		{
-			APIGroups: []string{
-				"security.openshift.io",
-			},
-			Resources: []string{
-				"securitycontextconstraints",
-			},
-			Verbs: []string{
-				"get",
-				"list",
-				"watch",
-			},
-		},
-		{
-			APIGroups: []string{
-				"security.openshift.io",
-			},
-			Resources: []string{
-				"securitycontextconstraints",
-			},
-			ResourceNames: []string{
-				"privileged",
-			},
-			Verbs: []string{
-				"get",
-				"patch",
-				"update",
 			},
 		},
 		{
@@ -229,15 +105,64 @@ func GetClusterPermissions() []rbacv1.PolicyRule {
 		},
 		{
 			APIGroups: []string{
-				"operators.coreos.com",
+				"apps",
 			},
 			Resources: []string{
-				"clusterserviceversions",
+				"deployments/finalizers",
+			},
+			ResourceNames: []string{
+				"openstack-cluster-operator",
 			},
 			Verbs: []string{
-				"get",
-				"list",
-				"watch",
+				"update",
+			},
+		},
+		{
+			APIGroups: []string{
+				"controlplane.openstack.org",
+			},
+			Resources: []string{
+				"*",
+				"controlplanes",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
+		{
+			APIGroups: []string{
+				"database.openstack.org",
+			},
+			Resources: []string{
+				"*",
+				"mariadb",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
+		{
+			APIGroups: []string{
+				"keystone.openstack.org",
+			},
+			Resources: []string{
+				"*",
+				"keystoneapis",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
+		{
+			APIGroups: []string{
+				"glance.openstack.org",
+			},
+			Resources: []string{
+				"*",
+				"glanceapis",
+			},
+			Verbs: []string{
+				"*",
 			},
 		},
 	}
@@ -245,6 +170,8 @@ func GetClusterPermissions() []rbacv1.PolicyRule {
 
 // GetInstallStrategyBase returns the cluster base strategy
 func GetInstallStrategyBase(namespace, image, imagePullPolicy string) csvv1alpha1.StrategyDetailsDeployment {
+	rules := getOperatorRules()
+
 	return csvv1alpha1.StrategyDetailsDeployment{
 		DeploymentSpecs: []csvv1alpha1.StrategyDeploymentSpec{
 			csvv1alpha1.StrategyDeploymentSpec{
@@ -252,11 +179,10 @@ func GetInstallStrategyBase(namespace, image, imagePullPolicy string) csvv1alpha
 				Spec: getDeploymentSpec(namespace, image, imagePullPolicy),
 			},
 		},
-		Permissions: []csvv1alpha1.StrategyDeploymentPermissions{},
-		ClusterPermissions: []csvv1alpha1.StrategyDeploymentPermissions{
-			csvv1alpha1.StrategyDeploymentPermissions{
-				ServiceAccountName: openstackClusterName,
-				Rules:              GetClusterPermissions(),
+		Permissions: []csvv1alpha1.StrategyDeploymentPermissions{
+			{
+				ServiceAccountName: "openstack-cluster-operator",
+				Rules:              *rules,
 			},
 		},
 	}
@@ -266,14 +192,51 @@ func GetInstallStrategyBase(namespace, image, imagePullPolicy string) csvv1alpha
 func GetCSVBase(name, namespace, displayName, description, image, replaces string, version semver.Version, crdDisplay string) *csvv1alpha1.ClusterServiceVersion {
 	almExamples, _ := json.Marshal([]interface{}{
 		map[string]interface{}{
-			"apiVersion": "openstackcluster.openstack.org/v1",
-			"kind":       "OpenStackCluster",
+			"apiVersion": "controlplane.openstack.org/v1beta1",
+			"kind":       "ControlPlane",
 			"metadata": map[string]string{
-				"name":      "openstack-cluster-operator",
+				"name":      "openstack-ctlplane",
 				"namespace": namespace,
 			},
 			"spec": map[string]interface{}{
-				"BareMetalPlatform": false,
+				"keystone": map[string]interface{}{
+					"replicas": 1,
+				},
+				"glance": map[string]interface{}{
+					"replicas": 1,
+				},
+				"storage_class": "host-nfs-storageclass",
+			},
+		},
+		map[string]interface{}{
+			"apiVersion": "compute-node.openstack.org/v1alpha1",
+			"kind":       "ComputeNodeOpenStack",
+			"metadata": map[string]string{
+				"name":      "openstack-compute-basic",
+				"namespace": namespace,
+			},
+			"spec": map[string]interface{}{
+				"roleName":                 "worker-osp",
+				"clusterName":              "ostest",
+				"baseWorkerMachineSetName": "ostest-worker-0",
+				"k8sServiceIP":             "172.30.0.1",
+				"apiIntIP":                 "192.168.111.5",
+				"workers":                  "1",
+				"selinuxDisabled":          true,
+				"compute": map[string]interface{}{
+					"novaComputeCPUDedicatedSet": "4-7",
+					"novaComputeCPUSharedSet":    "0-3",
+					"sshdPort":                   2022,
+					"commonConfigMap":            "common-config",
+					"ospSecrets":                 "osp-secrets",
+				},
+				"drain": map[string]interface{}{
+					"drainPodImage": "quay.io/openstack-k8s-operators/tripleo-deploy",
+					"enabled":       false,
+				},
+				"openStackClientAdminSecret": "openstackclient-admin",
+				"openStackClientConfigMap":   "openstackclient",
+				"serviceAccount":             "compute-node",
 			},
 		},
 	})
@@ -360,11 +323,11 @@ func GetCSVBase(name, namespace, displayName, description, image, replaces strin
 			CustomResourceDefinitions: csvv1alpha1.CustomResourceDefinitions{
 				Owned: []csvv1alpha1.CRDDescription{
 					csvv1alpha1.CRDDescription{
-						Name:        "openstackclusters.openstackcluster.openstack.org",
-						Version:     "v1",
-						Kind:        "OpenStackCluster",
-						DisplayName: crdDisplay + " Deployment",
-						Description: "Represents the deployment of " + crdDisplay,
+						Name:        "controlplanes.controlplane.openstack.org",
+						Version:     "v1beta1",
+						Kind:        "ControlPlane",
+						DisplayName: "Control Plane",
+						Description: "Represents a Control Plane Deployment for the " + crdDisplay,
 					},
 				},
 				Required: []csvv1alpha1.CRDDescription{},

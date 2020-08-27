@@ -1,0 +1,10 @@
+apiVersion: database.openstack.org/v1beta1
+kind: MariaDB
+metadata:
+  name: mariadb
+  namespace: {{ .Namespace }}
+spec:
+  secret: mariadb-secret
+  storageClass: {{ .StorageClass }}
+  storageRequest: 10G
+  containerImage: docker.io/tripleomaster/centos-binary-mariadb:current-tripleo

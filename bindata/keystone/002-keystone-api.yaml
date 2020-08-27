@@ -1,0 +1,10 @@
+apiVersion: keystone.openstack.org/v1beta1
+kind: KeystoneAPI
+metadata:
+  name: keystone
+  namespace: {{ .Namespace }}
+spec:
+  containerImage: docker.io/tripleomaster/centos-binary-keystone:current-tripleo
+  replicas: {{ .KeystoneReplicas }}
+  databaseHostname: mariadb
+  secret: keystone-secret
