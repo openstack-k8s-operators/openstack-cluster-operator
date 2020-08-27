@@ -118,3 +118,9 @@ bundle-build:
 
 csv-merger:
 	CGO_ENABLED=0 go build -a -ldflags '-extldflags "-static"' -o bin/csv-merger tools/csv-merger/csv-merger.go
+
+clean:
+	GO111MODULE=on; \
+	go mod tidy; \
+	go mod vendor; \
+	rm -rf bin

@@ -72,6 +72,7 @@ var (
 	neutronCsv          = flag.String("neutron-csv", "", "Neutron CSV string")
 	computeNodeCsv      = flag.String("compute-node-csv", "", "Compute Node CSV string")
 	keystoneCsv         = flag.String("keystone-csv", "", "Keystone CSV string")
+	glanceCsv           = flag.String("glance-csv", "", "Glance CSV string")
 	heatCsv             = flag.String("heat-csv", "", "Heat CSV string")
 	mariadbCsv          = flag.String("mariadb-csv", "", "Mariadb CSV string")
 	operatorImage       = flag.String("operator-image-name", "", "OpenStack Cluster Operator image")
@@ -80,10 +81,10 @@ var (
 	metadataDescription = flag.String("metadata-description", "", "Metadata")
 	specDescription     = flag.String("spec-description", "", "Description")
 	specDisplayName     = flag.String("spec-displayname", "", "Display Name")
-	namespace           = flag.String("namespace", "openstack-cluster-operator", "Namespace")
+	namespace           = flag.String("namespace", "openstack", "Namespace")
 	crdDisplay          = flag.String("crd-display", "OpenStack Cluster", "Label show in OLM UI about the primary CRD")
 	csvOverrides        = flag.String("csv-overrides", "", "CSV like string with punctual changes that will be recursively applied (if possible)")
-	visibleCRDList      = flag.String("visible-crds-list", "openstackclusters.openstackcluster.openstack.org",
+	visibleCRDList      = flag.String("visible-crds-list", "controlplanes.controlplane.openstack.org,computenodeopenstacks.compute-node.openstack.org",
 		"Comma separated list of all the CRDs that should be visible in OLM console")
 	relatedImagesList = flag.String("related-images-list", "",
 		"Comma separated list of all the images referred in the CSV (just the image pull URLs or eventually a set of 'image|name' collations)")
@@ -208,6 +209,7 @@ func main() {
 			*neutronCsv,
 			*computeNodeCsv,
 			*keystoneCsv,
+			*glanceCsv,
 			*heatCsv,
 			*mariadbCsv,
 		}
