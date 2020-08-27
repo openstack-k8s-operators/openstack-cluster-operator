@@ -225,6 +225,7 @@ ${PROJECT_ROOT}/build/_output/csv-merger \
   --spec-description="Installs OpenStack Cluster Operator" \
   --crd-display="OpenStack Cluster Operator" \
   -csv-overrides="$(<${csvOverrides})" \
+  --namespace="${OPERATOR_NAMESPACE}" \
   --operator-image-name="${OPERATOR_IMAGE}" > "${CSV_DIR}/${OPERATOR_NAME}.v${CSV_VERSION}.${CSV_EXT}"
 (cd ${PROJECT_ROOT}/tools/csv-merger/ && go clean)
 
