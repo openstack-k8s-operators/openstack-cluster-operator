@@ -37,19 +37,21 @@ spec:
           description: ControlPlaneSpec defines the desired state of ControlPlane
           properties:
             glance:
-              description: glance API settings
+              description: Glance API settings
               properties:
                 replicas:
+                  description: number of Glance API replicas
                   type: integer
               type: object
             keystone:
-              description: keystone API settings
+              description: Keystone API settings
               properties:
                 replicas:
+                  description: number of Keystone API replicas
                   type: integer
               type: object
             storage_class:
-              description: defines the desired state of KeystoneAPI
+              description: storage class to use for storage claims
               type: string
           type: object
         status:
