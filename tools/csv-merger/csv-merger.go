@@ -74,7 +74,6 @@ var (
 	keystoneCsv         = flag.String("keystone-csv", "", "Keystone CSV string")
 	glanceCsv           = flag.String("glance-csv", "", "Glance CSV string")
 	heatCsv             = flag.String("heat-csv", "", "Heat CSV string")
-	glanceCsv           = flag.String("glance-csv", "", "Glance CSV string")
 	mariadbCsv          = flag.String("mariadb-csv", "", "Mariadb CSV string")
 	operatorImage       = flag.String("operator-image-name", "", "OpenStack Cluster Operator image")
 	csvVersion          = flag.String("csv-version", "", "CSV version")
