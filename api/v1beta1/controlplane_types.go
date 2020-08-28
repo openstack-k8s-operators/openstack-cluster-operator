@@ -35,7 +35,7 @@ type GlanceSpec struct {
 // ControlPlaneSpec defines the desired state of ControlPlane
 type ControlPlaneSpec struct {
 	// storage class to use for storage claims
-	StorageClass string `json:"storage_class,omitempty"`
+	StorageClass string `json:"storageClass,omitempty"`
 	// Keystone API settings
 	Keystone KeystoneSpec `json:"keystone,omitempty"`
 	// Glance API settings
