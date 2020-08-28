@@ -72,7 +72,6 @@ var (
 	neutronCsv          = flag.String("neutron-csv", "", "Neutron CSV string")
 	computeNodeCsv      = flag.String("compute-node-csv", "", "Compute Node CSV string")
 	keystoneCsv         = flag.String("keystone-csv", "", "Keystone CSV string")
-	glanceCsv           = flag.String("glance-csv", "", "Glance CSV string")
 	heatCsv             = flag.String("heat-csv", "", "Heat CSV string")
 	glanceCsv           = flag.String("glance-csv", "", "Glance CSV string")
 	mariadbCsv          = flag.String("mariadb-csv", "", "Mariadb CSV string")
@@ -210,7 +209,6 @@ func main() {
 			*neutronCsv,
 			*computeNodeCsv,
 			*keystoneCsv,
-			*glanceCsv,
 			*heatCsv,
 			*glanceCsv,
 			*mariadbCsv,
