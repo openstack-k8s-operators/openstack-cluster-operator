@@ -252,7 +252,7 @@ func GetCSVBase(name, namespace, displayName, description, image, replaces strin
 			Annotations: map[string]string{
 				"alm-examples": string(almExamples),
 				// (slagle) TODO: switch back to Basic Install after demo
-				"capabilities":   "Auto Pilot",
+				"capabilities":   "Seamless Upgrades",
 				"certified":      "false",
 				"categories":     "OpenShift Optional",
 				"containerImage": image,
