@@ -165,6 +165,18 @@ func getOperatorRules() *[]rbacv1.PolicyRule {
 				"*",
 			},
 		},
+		{
+			APIGroups: []string{
+				"placement.openstack.org",
+			},
+			Resources: []string{
+				"*",
+				"placementapis",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
 	}
 }
 
@@ -203,6 +215,9 @@ func GetCSVBase(name, namespace, displayName, description, image, replaces strin
 					"replicas": 1,
 				},
 				"glance": map[string]interface{}{
+					"replicas": 1,
+				},
+				"placement": map[string]interface{}{
 					"replicas": 1,
 				},
 				"storage_class": "host-nfs-storageclass",

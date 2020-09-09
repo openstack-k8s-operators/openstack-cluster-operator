@@ -33,6 +33,7 @@ import (
 	bindatautil "github.com/openstack-k8s-operators/openstack-cluster-operator/pkg/bindata_util"
 )
 
+// ManifestPath - bindata path
 var ManifestPath = "./bindata"
 
 const (
@@ -51,6 +52,7 @@ type ControlPlaneReconciler struct {
 // +kubebuilder:rbac:groups=controlplane.openstack.org,resources=controlplanes,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=controlplane.openstack.org,resources=controlplanes/status,verbs=get;update;patch
 
+// Reconcile - controleplane api
 func (r *ControlPlaneReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	_ = context.Background()
 	_ = r.Log.WithValues("controlplane", req.NamespacedName)
@@ -100,6 +102,14 @@ func (r *ControlPlaneReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	}
 	objs = append(objs, manifests...)
 
+	// Generate the Placement objects
+	manifests, err = bindatautil.RenderDir(filepath.Join(ManifestPath, "placement"), &data)
+	if err != nil {
+		ctrl.Log.Error(err, "Failed to render placement manifests : %v")
+		return ctrl.Result{}, err
+	}
+	objs = append(objs, manifests...)
+
 	// Apply the objects to the cluster
 	oref := metav1.NewControllerRef(instance, instance.GroupVersionKind())
 	labelSelector := map[string]string{
@@ -125,6 +135,7 @@ func (r *ControlPlaneReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	return ctrl.Result{}, nil
 }
 
+// SetupWithManager -
 func (r *ControlPlaneReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&controlplanev1beta1.ControlPlane{}).
@@ -135,6 +146,7 @@ func getRenderData(ctx context.Context, client client.Client, instance *controlp
 	data := bindatautil.MakeRenderData()
 	data.Data["KeystoneReplicas"] = instance.Spec.Keystone.Replicas
 	data.Data["GlanceReplicas"] = instance.Spec.Glance.Replicas
+	data.Data["PlacementReplicas"] = instance.Spec.Placement.Replicas
 	data.Data["Namespace"] = instance.Namespace
 	data.Data["StorageClass"] = instance.Spec.StorageClass
 	return data, nil

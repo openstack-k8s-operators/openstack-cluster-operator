@@ -23,12 +23,13 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"k8s.io/apiextensions-apiserver/pkg/apis/apiextensions"
 	"log"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"k8s.io/apiextensions-apiserver/pkg/apis/apiextensions"
 
 	"github.com/blang/semver"
 	"github.com/ghodss/yaml"
@@ -75,6 +76,7 @@ var (
 	heatCsv             = flag.String("heat-csv", "", "Heat CSV string")
 	glanceCsv           = flag.String("glance-csv", "", "Glance CSV string")
 	mariadbCsv          = flag.String("mariadb-csv", "", "Mariadb CSV string")
+	placementCsv        = flag.String("placement-csv", "", "Placement CSV string")
 	operatorImage       = flag.String("operator-image-name", "", "OpenStack Cluster Operator image")
 	csvVersion          = flag.String("csv-version", "", "CSV version")
 	replacesCsvVersion  = flag.String("replaces-csv-version", "", "CSV version to replace")
@@ -212,6 +214,7 @@ func main() {
 			*heatCsv,
 			*glanceCsv,
 			*mariadbCsv,
+			*placementCsv,
 		}
 
 		version := semver.MustParse(*csvVersion)

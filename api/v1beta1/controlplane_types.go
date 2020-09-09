@@ -20,15 +20,21 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// defines the desired state of KeystoneAPI
+// KeystoneSpec defines the desired state of KeystoneAPI
 type KeystoneSpec struct {
 	// number of Keystone API replicas
 	Replicas int `json:"replicas,omitempty"`
 }
 
-// defines the desired state of GlanceAPI
+// GlanceSpec defines the desired state of GlanceAPI
 type GlanceSpec struct {
 	// number of Glance API replicas
+	Replicas int `json:"replicas,omitempty"`
+}
+
+// PlacementSpec defines the desired state of PlacementAPI
+type PlacementSpec struct {
+	// number of Placement API replicas
 	Replicas int `json:"replicas,omitempty"`
 }
 
@@ -40,6 +46,8 @@ type ControlPlaneSpec struct {
 	Keystone KeystoneSpec `json:"keystone,omitempty"`
 	// Glance API settings
 	Glance GlanceSpec `json:"glance,omitempty"`
+	// Placement API settings
+	Placement PlacementSpec `json:"placement,omitempty"`
 }
 
 // ControlPlaneStatus defines the observed state of ControlPlane

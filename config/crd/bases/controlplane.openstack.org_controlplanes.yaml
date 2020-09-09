@@ -50,6 +50,13 @@ spec:
                   description: number of Keystone API replicas
                   type: integer
               type: object
+            placement:
+              description: Placement API settings
+              properties:
+                replicas:
+                  description: number of Placement API replicas
+                  type: integer
+              type: object
             storage_class:
               description: storage class to use for storage claims
               type: string

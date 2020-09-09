@@ -1,5 +1,6 @@
 domain: openstack.org
 layout: go.kubebuilder.io/v2
+projectName: openstack-cluster-operator
 repo: github.com/openstack-k8s-operators/openstack-cluster-operator
 resources:
 - group: controlplane
@@ -7,4 +8,4 @@ resources:
   version: v1beta1
 version: 3-alpha
 plugins:
-  go.operator-sdk.io/v2-alpha: {}
+  go.sdk.operatorframework.io/v2-alpha: {}
