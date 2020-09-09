@@ -33,6 +33,7 @@ import (
 	bindatautil "github.com/openstack-k8s-operators/openstack-cluster-operator/pkg/bindata_util"
 )
 
+// ManifestPath - bindata path
 var ManifestPath = "./bindata"
 
 const (
@@ -51,6 +52,7 @@ type ControlPlaneReconciler struct {
 // +kubebuilder:rbac:groups=controlplane.openstack.org,resources=controlplanes,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=controlplane.openstack.org,resources=controlplanes/status,verbs=get;update;patch
 
+// Reconcile - controleplane api
 func (r *ControlPlaneReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	_ = context.Background()
 	_ = r.Log.WithValues("controlplane", req.NamespacedName)
@@ -125,6 +127,7 @@ func (r *ControlPlaneReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	return ctrl.Result{}, nil
 }
 
+// SetupWithManager -
 func (r *ControlPlaneReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&controlplanev1beta1.ControlPlane{}).
