@@ -7,4 +7,6 @@ spec:
     replicas: 1
   glance:
     replicas: 1
+  placement:
+    replicas: 1
   storage_class: host-nfs-storageclass

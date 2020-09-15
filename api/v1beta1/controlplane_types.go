@@ -32,6 +32,12 @@ type GlanceSpec struct {
 	Replicas int `json:"replicas,omitempty"`
 }
 
+// PlacementSpec defines the desired state of PlacementAPI
+type PlacementSpec struct {
+	// number of Placement API replicas
+	Replicas int `json:"replicas,omitempty"`
+}
+
 // ControlPlaneSpec defines the desired state of ControlPlane
 type ControlPlaneSpec struct {
 	// storage class to use for storage claims
@@ -40,6 +46,8 @@ type ControlPlaneSpec struct {
 	Keystone KeystoneSpec `json:"keystone,omitempty"`
 	// Glance API settings
 	Glance GlanceSpec `json:"glance,omitempty"`
+	// Placement API settings
+	Placement PlacementSpec `json:"placement,omitempty"`
 }
 
 // ControlPlaneStatus defines the observed state of ControlPlane

@@ -1,0 +1,11 @@
+apiVersion: placement.openstack.org/v1beta1
+kind: PlacementAPI
+metadata:
+  name: placementapi
+  namespace: {{ .Namespace }}
+spec:
+  # Add fields here
+  databaseHostname: mariadb
+  replicas: {{ .PlacementReplicas }}
+  containerImage: docker.io/tripleomaster/centos-binary-placement-api:current-tripleo
+  secret: placement-secret

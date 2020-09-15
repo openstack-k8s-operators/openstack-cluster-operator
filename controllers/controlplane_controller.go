@@ -102,6 +102,14 @@ func (r *ControlPlaneReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	}
 	objs = append(objs, manifests...)
 
+	// Generate the Placement objects
+	manifests, err = bindatautil.RenderDir(filepath.Join(ManifestPath, "placement"), &data)
+	if err != nil {
+		ctrl.Log.Error(err, "Failed to render placement manifests : %v")
+		return ctrl.Result{}, err
+	}
+	objs = append(objs, manifests...)
+
 	// Apply the objects to the cluster
 	oref := metav1.NewControllerRef(instance, instance.GroupVersionKind())
 	labelSelector := map[string]string{
@@ -138,6 +146,7 @@ func getRenderData(ctx context.Context, client client.Client, instance *controlp
 	data := bindatautil.MakeRenderData()
 	data.Data["KeystoneReplicas"] = instance.Spec.Keystone.Replicas
 	data.Data["GlanceReplicas"] = instance.Spec.Glance.Replicas
+	data.Data["PlacementReplicas"] = instance.Spec.Placement.Replicas
 	data.Data["Namespace"] = instance.Namespace
 	data.Data["StorageClass"] = instance.Spec.StorageClass
 	return data, nil

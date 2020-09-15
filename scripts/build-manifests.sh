@@ -45,6 +45,7 @@ COMPUTE_WORKER_IMAGE="${COMPUTE_WORKER_IMAGE:-quay.io/openstack-k8s-operators/co
 KEYSTONE_IMAGE="${KEYSTONE_IMAGE:-quay.io/openstack-k8s-operators/keystone-operator:v0.0.2}"
 HEAT_IMAGE="${HEAT_IMAGE:-quay.io/openstack-k8s-operators/heat-operator:devel}"
 GLANCE_IMAGE="${GLANCE_IMAGE:-quay.io/openstack-k8s-operators/glance-operator:devel}"
+PLACEMENT_IMAGE="${PLACEMENT_IMAGE:-quay.io/openstack-k8s-operators/placement-operator:devel}"
 MARIADB_IMAGE="${MARIADB_IMAGE:-quay.io/openstack-k8s-operators/mariadb-operator:v0.0.1}"
 
 # Important extensions
@@ -169,12 +170,25 @@ function create_glance_csv() {
 }
 
 function create_mariadb_csv() {
-  local operatorName="mariad"
+  local operatorName="mariadb"
   local imagePullUrl="${MARIADB_IMAGE}"
   local operatorArgs=" \
     --namespace=${OPERATOR_NAMESPACE} \
     --csv-version=${CSV_VERSION} \
     --operator-image-name=${MARIADB_IMAGE}
+  "
+
+  gen_csv ${operatorName} ${imagePullUrl} ${operatorArgs}
+  echo "${operatorName}"
+}
+
+function create_placement_csv() {
+  local operatorName="placement"
+  local imagePullUrl="${PLACEMENT_IMAGE}"
+  local operatorArgs=" \
+    --namespace=${OPERATOR_NAMESPACE} \
+    --csv-version=${CSV_VERSION} \
+    --operator-image-name=${PLACEMENT_IMAGE}
   "
 
   gen_csv ${operatorName} ${imagePullUrl} ${operatorArgs}
@@ -190,6 +204,7 @@ keystoneCsv="${TEMPDIR}/$(create_keystone_csv).${CSV_EXT}"
 heatCsv="${TEMPDIR}/$(create_heat_csv).${CSV_EXT}"
 mariadbCsv="${TEMPDIR}/$(create_mariadb_csv).${CSV_EXT}"
 glanceCsv="${TEMPDIR}/$(create_glance_csv).${CSV_EXT}"
+placementCsv="${TEMPDIR}/$(create_placement_csv).${CSV_EXT}"
 csvOverrides="${TEMPDIR}/csv_overrides.${CSV_EXT}"
 cat > ${csvOverrides} <<- EOM
 ---
@@ -219,6 +234,7 @@ ${PROJECT_ROOT}/bin/csv-merger \
   --keystone-csv="$(<${keystoneCsv})" \
   --glance-csv="$(<${glanceCsv})" \
   --mariadb-csv="$(<${mariadbCsv})" \
+  --placement-csv="$(<${placementCsv})" \
   --csv-version=${CSV_VERSION} \
   --replaces-csv-version=${REPLACES_CSV_VERSION} \
   --spec-displayname="OpenStack Cluster Operator" \
@@ -236,5 +252,6 @@ copy_deployment_specs "compute-node-operator" "${COMPUTE_WORKER_IMAGE}" "$CSV_DI
 copy_deployment_specs "keystone-operator" "${KEYSTONE_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "mariadb-operator" "${MARIADB_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "glance-operator" "${GLANCE_IMAGE}" "$CSV_DIR"
+copy_deployment_specs "placement-operator" "${PLACEMENT_IMAGE}" "$CSV_DIR"
 
 rm -rf ${TEMPDIR}
