@@ -20,13 +20,13 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// defines the desired state of KeystoneAPI
+// KeystoneSpec defines the desired state of KeystoneAPI
 type KeystoneSpec struct {
 	// number of Keystone API replicas
 	Replicas int `json:"replicas,omitempty"`
 }
 
-// defines the desired state of GlanceAPI
+// GlanceSpec defines the desired state of GlanceAPI
 type GlanceSpec struct {
 	// number of Glance API replicas
 	Replicas int `json:"replicas,omitempty"`
