@@ -38,6 +38,12 @@ type PlacementSpec struct {
 	Replicas int `json:"replicas,omitempty"`
 }
 
+// InterconnectSpec defines the desired state of Interconnect
+type InterconnectSpec struct {
+	// number of Interconnect
+	Replicas int `json:"replicas,omitempty"`
+}
+
 // ControlPlaneSpec defines the desired state of ControlPlane
 type ControlPlaneSpec struct {
 	// storage class to use for storage claims
@@ -48,6 +54,8 @@ type ControlPlaneSpec struct {
 	Glance GlanceSpec `json:"glance,omitempty"`
 	// Placement API settings
 	Placement PlacementSpec `json:"placement,omitempty"`
+	// AMQ Interconnect settings
+	Interconnect InterconnectSpec `json:"interconnect,omitempty"`
 }
 
 // ControlPlaneStatus defines the observed state of ControlPlane

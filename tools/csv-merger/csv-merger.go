@@ -337,6 +337,17 @@ func main() {
 			}
 		}
 
+		csvExtended.Spec.CustomResourceDefinitions.Required = append(
+			csvExtended.Spec.CustomResourceDefinitions.Required,
+			csvv1alpha1.CRDDescription{
+				Name:        "interconnects.interconnectedcloud.github.io",
+				Version:     "v1alpha1",
+				Kind:        "Interconnect",
+				Description: "AMQ Interconnect",
+				DisplayName: "An instance of AMQ Interconnect",
+			},
+		)
+
 		hiddenCrdsJ, err := json.Marshal(hiddenCrds)
 		if err != nil {
 			panic(err)

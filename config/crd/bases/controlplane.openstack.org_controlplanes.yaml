@@ -43,6 +43,13 @@ spec:
                   description: number of Glance API replicas
                   type: integer
               type: object
+            interconnect:
+              description: AMQ Interconnect settings
+              properties:
+                replicas:
+                  description: number of Interconnect
+                  type: integer
+              type: object
             keystone:
               description: Keystone API settings
               properties:

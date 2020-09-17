@@ -70,6 +70,7 @@ func (r *ControlPlaneReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 		// Error reading the object - requeue the request.
 		return ctrl.Result{}, err
 	}
+	setDefaults(instance)
 
 	data, err := getRenderData(context.TODO(), r.Client, instance)
 	if err != nil {
@@ -82,6 +83,14 @@ func (r *ControlPlaneReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	manifests, err := bindatautil.RenderDir(filepath.Join(ManifestPath, "mariadb"), &data)
 	if err != nil {
 		ctrl.Log.Error(err, "Failed to render mariadb manifests : %v")
+		return ctrl.Result{}, err
+	}
+	objs = append(objs, manifests...)
+
+	// Generate the AMQ Interconnect objects
+	manifests, err = bindatautil.RenderDir(filepath.Join(ManifestPath, "interconnect"), &data)
+	if err != nil {
+		ctrl.Log.Error(err, "Failed to render interconnect manifests : %v")
 		return ctrl.Result{}, err
 	}
 	objs = append(objs, manifests...)
@@ -147,7 +156,15 @@ func getRenderData(ctx context.Context, client client.Client, instance *controlp
 	data.Data["KeystoneReplicas"] = instance.Spec.Keystone.Replicas
 	data.Data["GlanceReplicas"] = instance.Spec.Glance.Replicas
 	data.Data["PlacementReplicas"] = instance.Spec.Placement.Replicas
+	data.Data["InterconnectReplicas"] = instance.Spec.Interconnect.Replicas
 	data.Data["Namespace"] = instance.Namespace
 	data.Data["StorageClass"] = instance.Spec.StorageClass
 	return data, nil
+}
+
+func setDefaults(instance *controlplanev1beta1.ControlPlane) {
+	// required to be greated than 0 by the interconnect operator
+	if instance.Spec.Interconnect.Replicas < 1 {
+		instance.Spec.Interconnect.Replicas = 1
+	}
 }
