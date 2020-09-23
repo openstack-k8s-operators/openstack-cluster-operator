@@ -1,7 +1,7 @@
 apiVersion: placement.openstack.org/v1beta1
 kind: PlacementAPI
 metadata:
-  name: placementapi
+  name: placement
   namespace: {{ .Namespace }}
 spec:
   # Add fields here

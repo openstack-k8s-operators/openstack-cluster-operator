@@ -57,6 +57,25 @@ spec:
                   description: number of Keystone API replicas
                   type: integer
               type: object
+            nova:
+              description: Nova settings
+              properties:
+                novaAPIReplicas:
+                  description: number of Nova API replicas
+                  type: integer
+                novaConductorReplicas:
+                  description: number of Nova Conductor replicas
+                  type: integer
+                novaMetadataReplicas:
+                  description: number of Nova Metadata replicas
+                  type: integer
+                novaNoVNCProxyReplicas:
+                  description: number of Nova NoVNCProxy replicas
+                  type: integer
+                novaSchedulerReplicas:
+                  description: number of Nova Scheduler replicas
+                  type: integer
+              type: object
             placement:
               description: Placement API settings
               properties:
