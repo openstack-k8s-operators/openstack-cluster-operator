@@ -177,6 +177,18 @@ func getOperatorRules() *[]rbacv1.PolicyRule {
 				"*",
 			},
 		},
+		{
+			APIGroups: []string{
+				"interconnectedcloud.github.io",
+			},
+			Resources: []string{
+				"*",
+				"interconnects",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
 	}
 }
 

@@ -1,0 +1,12 @@
+apiVersion: interconnectedcloud.github.io/v1alpha1
+kind: Interconnect
+metadata:
+  name: amq-interconnect
+  labels: {}
+  namespace: {{ .Namespace }}
+spec:
+  users: interconnect-secret
+  deploymentPlan:
+    placement: Any
+    role: interior
+    size: {{ .InterconnectReplicas }}
