@@ -119,6 +119,15 @@ func (r *ControlPlaneReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	}
 	objs = append(objs, manifests...)
 
+	// Generate the Nova objects
+	// TODO: how to handle adding additional cells using openstack-cluster-operator
+	manifests, err = bindatautil.RenderDir(filepath.Join(ManifestPath, "nova"), &data)
+	if err != nil {
+		ctrl.Log.Error(err, "Failed to render nova manifests : %v")
+		return ctrl.Result{}, err
+	}
+	objs = append(objs, manifests...)
+
 	// Apply the objects to the cluster
 	oref := metav1.NewControllerRef(instance, instance.GroupVersionKind())
 	labelSelector := map[string]string{
@@ -157,6 +166,11 @@ func getRenderData(ctx context.Context, client client.Client, instance *controlp
 	data.Data["GlanceReplicas"] = instance.Spec.Glance.Replicas
 	data.Data["PlacementReplicas"] = instance.Spec.Placement.Replicas
 	data.Data["InterconnectReplicas"] = instance.Spec.Interconnect.Replicas
+	data.Data["NovaAPIReplicas"] = instance.Spec.Nova.NovaAPIReplicas
+	data.Data["NovaConductorReplicas"] = instance.Spec.Nova.NovaConductorReplicas
+	data.Data["NovaMetadataReplicas"] = instance.Spec.Nova.NovaMetadataReplicas
+	data.Data["NovaNoVNCProxyReplicas"] = instance.Spec.Nova.NovaNoVNCProxyReplicas
+	data.Data["NovaSchedulerReplicas"] = instance.Spec.Nova.NovaSchedulerReplicas
 	data.Data["Namespace"] = instance.Namespace
 	data.Data["StorageClass"] = instance.Spec.StorageClass
 	return data, nil

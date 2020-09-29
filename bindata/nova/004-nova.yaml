@@ -1,0 +1,27 @@
+apiVersion: nova.openstack.org/v1beta1
+kind: Nova
+metadata:
+  name: nova
+  namespace: {{ .Namespace }}
+spec:
+  databaseHostname: mariadb
+  novaAPIReplicas: {{ .NovaAPIReplicas }}
+  novaSchedulerReplicas: {{ .NovaSchedulerReplicas }}
+  novaConductorReplicas: {{ .NovaConductorReplicas }}
+  novaSecret: nova-secret
+  placementSecret: placement-secret
+  neutronSecret: neutron-secret
+  transportURLSecret: nova-transport-url
+  novaAPIContainerImage: docker.io/tripleomaster/centos-binary-nova-api:current-tripleo
+  novaSchedulerContainerImage: docker.io/tripleomaster/centos-binary-nova-scheduler:current-tripleo
+  novaConductorContainerImage: docker.io/tripleomaster/centos-binary-nova-conductor:current-tripleo
+  cells:
+  - name: cell1
+    databaseHostname: mariadb
+    transportURLSecret: nova-cell1-transport-url
+    novaConductorContainerImage: docker.io/tripleomaster/centos-binary-nova-conductor:current-tripleo
+    novaMetadataContainerImage: docker.io/tripleomaster/centos-binary-nova-api:current-tripleo
+    novaNoVNCProxyContainerImage: docker.io/tripleomaster/centos-binary-nova-novncproxy:current-tripleo
+    novaConductorReplicas: {{ .NovaConductorReplicas }}
+    novaMetadataReplicas: {{ .NovaMetadataReplicas }}
+    novaNoVNCProxyReplicas: {{ .NovaNoVNCProxyReplicas }}

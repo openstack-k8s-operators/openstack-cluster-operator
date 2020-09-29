@@ -44,6 +44,20 @@ type InterconnectSpec struct {
 	Replicas int `json:"replicas,omitempty"`
 }
 
+// NovaSpec defines the desired state of Nova Control Plane
+type NovaSpec struct {
+	// number of Nova API replicas
+	NovaAPIReplicas int `json:"novaAPIReplicas,omitempty"`
+	// number of Nova Scheduler replicas
+	NovaSchedulerReplicas int `json:"novaSchedulerReplicas,omitempty"`
+	// number of Nova Conductor replicas
+	NovaConductorReplicas int `json:"novaConductorReplicas,omitempty"`
+	// number of Nova Metadata replicas
+	NovaMetadataReplicas int `json:"novaMetadataReplicas,omitempty"`
+	// number of Nova NoVNCProxy replicas
+	NovaNoVNCProxyReplicas int `json:"novaNoVNCProxyReplicas,omitempty"`
+}
+
 // ControlPlaneSpec defines the desired state of ControlPlane
 type ControlPlaneSpec struct {
 	// storage class to use for storage claims
@@ -56,6 +70,8 @@ type ControlPlaneSpec struct {
 	Placement PlacementSpec `json:"placement,omitempty"`
 	// AMQ Interconnect settings
 	Interconnect InterconnectSpec `json:"interconnect,omitempty"`
+	// Nova settings
+	Nova NovaSpec `json:"nova,omitempty"`
 }
 
 // ControlPlaneStatus defines the observed state of ControlPlane

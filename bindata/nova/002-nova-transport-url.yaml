@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nova-transport-url
+  namespace: {{ .Namespace }}
+stringData:
+  TransportUrl: rabbit://osp:passw0rd@rabbitmq.openstack.svc.cluster.local:5672/?ssl=0
