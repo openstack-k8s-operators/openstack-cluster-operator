@@ -4,4 +4,4 @@ metadata:
   name: nova-cell1-transport-url
   namespace: {{ .Namespace }}
 stringData:
-  TransportUrl: rabbit://cell1:passw0rd@rabbitmq.openstack.svc.cluster.local:5672/cell1?ssl=0
+  TransportUrl: amqp://cell1:passw0rd@amq-interconnect.openstack.svc:5672/cell1
