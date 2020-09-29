@@ -277,9 +277,8 @@ func GetCSVBase(name, namespace, displayName, description, image, replaces strin
 			Name:      fmt.Sprintf("%v.v%v", name, version.String()),
 			Namespace: "placeholder",
 			Annotations: map[string]string{
-				"alm-examples": string(almExamples),
-				// (slagle) TODO: switch back to Basic Install after demo
-				"capabilities":   "Auto Pilot",
+				"alm-examples":   string(almExamples),
+				"capabilities":   "Basic Install",
 				"certified":      "false",
 				"categories":     "OpenShift Optional",
 				"containerImage": image,
