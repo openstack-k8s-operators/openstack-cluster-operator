@@ -179,6 +179,24 @@ func getOperatorRules() *[]rbacv1.PolicyRule {
 		},
 		{
 			APIGroups: []string{
+				"nova.openstack.org",
+			},
+			Resources: []string{
+				"*",
+				"nova",
+				"novaapis",
+				"novacells",
+				"novaconductors",
+				"novamedata",
+				"novanovncproxies",
+				"novaschedulers",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
+		{
+			APIGroups: []string{
 				"interconnectedcloud.github.io",
 			},
 			Resources: []string{
