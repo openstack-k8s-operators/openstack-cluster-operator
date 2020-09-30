@@ -119,6 +119,14 @@ func (r *ControlPlaneReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	}
 	objs = append(objs, manifests...)
 
+	// Generate the Neutron objects
+	manifests, err = bindatautil.RenderDir(filepath.Join(ManifestPath, "neutron"), &data)
+	if err != nil {
+		ctrl.Log.Error(err, "Failed to render neutron manifests : %v")
+		return ctrl.Result{}, err
+	}
+	objs = append(objs, manifests...)
+
 	// Generate the Nova objects
 	// TODO: how to handle adding additional cells using openstack-cluster-operator
 	manifests, err = bindatautil.RenderDir(filepath.Join(ManifestPath, "nova"), &data)
