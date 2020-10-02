@@ -45,7 +45,7 @@ COMPUTE_WORKER_IMAGE="${COMPUTE_WORKER_IMAGE:-quay.io/openstack-k8s-operators/co
 KEYSTONE_IMAGE="${KEYSTONE_IMAGE:-quay.io/openstack-k8s-operators/keystone-operator:v0.0.2}"
 HEAT_IMAGE="${HEAT_IMAGE:-quay.io/openstack-k8s-operators/heat-operator:devel}"
 GLANCE_IMAGE="${GLANCE_IMAGE:-quay.io/openstack-k8s-operators/glance-operator:devel}"
-PLACEMENT_IMAGE="${PLACEMENT_IMAGE:-quay.io/openstack-k8s-operators/placement-operator:devel}"
+PLACEMENT_IMAGE="${PLACEMENT_IMAGE:-quay.io/openstack-k8s-operators/placement-operator:v0.0.1}"
 MARIADB_IMAGE="${MARIADB_IMAGE:-quay.io/openstack-k8s-operators/mariadb-operator:v0.0.1}"
 
 # Important extensions
