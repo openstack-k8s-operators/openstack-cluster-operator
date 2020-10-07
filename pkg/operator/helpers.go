@@ -261,12 +261,12 @@ func GetCSVBase(name, namespace, displayName, description, image, replaces strin
 				"namespace": namespace,
 			},
 			"spec": map[string]interface{}{
-				"roleName":                 "worker-osp",
+				"roleName":                 "compute-basic",
 				"clusterName":              "ostest",
 				"baseWorkerMachineSetName": "ostest-worker-0",
 				"k8sServiceIP":             "172.30.0.1",
 				"apiIntIP":                 "192.168.111.5",
-				"workers":                  "1",
+				"workers":                  1,
 				"selinuxDisabled":          true,
 				"compute": map[string]interface{}{
 					"novaComputeCPUDedicatedSet": "4-7",
