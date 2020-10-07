@@ -86,7 +86,7 @@ var (
 	namespace           = flag.String("namespace", "openstack", "Namespace")
 	crdDisplay          = flag.String("crd-display", "OpenStack Cluster", "Label show in OLM UI about the primary CRD")
 	csvOverrides        = flag.String("csv-overrides", "", "CSV like string with punctual changes that will be recursively applied (if possible)")
-	visibleCRDList      = flag.String("visible-crds-list", "controlplanes.controlplane.openstack.org,computenodeopenstacks.compute-node.openstack.org",
+	visibleCRDList      = flag.String("visible-crds-list", "controlplanes.controlplane.openstack.org,computenodeopenstacks.compute-node.openstack.org,openstackclients.controlplane.openstack.org",
 		"Comma separated list of all the CRDs that should be visible in OLM console")
 	relatedImagesList = flag.String("related-images-list", "",
 		"Comma separated list of all the images referred in the CSV (just the image pull URLs or eventually a set of 'image|name' collations)")
