@@ -207,6 +207,30 @@ func getOperatorRules() *[]rbacv1.PolicyRule {
 				"*",
 			},
 		},
+		{
+			APIGroups: []string{
+				"sriovnetwork.openshift.io",
+			},
+			Resources: []string{
+				"*",
+				"sriovnetworks",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
+		{
+			APIGroups: []string{
+				"performanceprofiles.performance.openshift.io",
+			},
+			Resources: []string{
+				"*",
+				"performanceprofiles",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
 	}
 }
 
