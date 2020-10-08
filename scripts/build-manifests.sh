@@ -34,7 +34,7 @@ DEPLOY_DIR="${PROJECT_ROOT}/deploy"
 CSV_DIR="${DEPLOY_DIR}/olm-catalog/openstack-cluster/${CSV_VERSION}"
 
 OPERATOR_NAME="${NAME:-openstack-cluster-operator}"
-OPERATOR_NAMESPACE="${NAMESPACE:-openstack-cluster-operator}"
+OPERATOR_NAMESPACE="${NAMESPACE:-openstack}"
 OPERATOR_IMAGE="${OPERATOR_IMAGE:-quay.io/openstack-k8s-operators/openstack-cluster-operator:v0.0.1}"
 IMAGE_PULL_POLICY="${IMAGE_PULL_POLICY:-IfNotPresent}"
 
@@ -77,18 +77,15 @@ function gen_csv() {
   # Handle arguments
   local operatorName="$1" && shift
   local imagePullUrl="$1" && shift
-  local dumpCRDsArg="$1" && shift
   local operatorArgs="$@"
 
   # Handle important vars
   local csv="${operatorName}.${CSV_EXT}"
-  #local csvWithCRDs="${operatorName}.${CSV_CRD_EXT}"
-  local crds="${operatorName}.crds.yaml"
 
   # TODO: Use oc to run if cluster is available
   local containerBuildCmd="$CONTAINER_BUILD_CMD run --rm --entrypoint=/usr/local/bin/csv-generator ${imagePullUrl} ${operatorArgs}"
 
-  eval $containerBuildCmd > $csv
+  eval $containerBuildCmd > $csv || exit 1
 }
 
 function create_nova_csv() {
