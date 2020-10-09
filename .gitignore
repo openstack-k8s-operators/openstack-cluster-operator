@@ -1,3 +1,7 @@
+/deploy
+/database
+/vendor
+/index.Dockerfile
 
 # Binaries for programs and plugins
 *.exe
