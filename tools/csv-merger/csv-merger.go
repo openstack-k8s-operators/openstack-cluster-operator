@@ -346,6 +346,20 @@ func main() {
 				Description: "AMQ Interconnect",
 				DisplayName: "An instance of AMQ Interconnect",
 			},
+			csvv1alpha1.CRDDescription{
+				Name:        "sriovnetworks.sriovnetwork.openshift.io",
+				Version:     "v1",
+				Kind:        "SriovNetwork",
+				Description: "Sriov Network",
+				DisplayName: "An instance of Sriov Network",
+			},
+			csvv1alpha1.CRDDescription{
+				Name:        "performanceprofiles.performance.openshift.io",
+				Version:     "v1alpha1",
+				Kind:        "PerformanceProfile",
+				Description: "Performance Profile",
+				DisplayName: "An instance of Performance Profile",
+			},
 		)
 
 		hiddenCrdsJ, err := json.Marshal(hiddenCrds)
