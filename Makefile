@@ -123,4 +123,6 @@ clean:
 	GO111MODULE=on; \
 	go mod tidy; \
 	go mod vendor; \
-	rm -rf bin
+	rm -rf bin; \
+	rm -rf deploy; \
+	rm -rf database
