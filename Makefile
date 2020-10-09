@@ -125,4 +125,5 @@ clean:
 	go mod vendor; \
 	rm -rf bin; \
 	rm -rf deploy; \
-	rm -rf database
+	rm -rf database \
+	rm -rf bundle.Dockerfile index.Dockerfile
