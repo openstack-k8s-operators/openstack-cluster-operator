@@ -47,6 +47,7 @@ HEAT_IMAGE="${HEAT_IMAGE:-quay.io/openstack-k8s-operators/heat-operator:devel}"
 GLANCE_IMAGE="${GLANCE_IMAGE:-quay.io/openstack-k8s-operators/glance-operator:devel}"
 PLACEMENT_IMAGE="${PLACEMENT_IMAGE:-quay.io/openstack-k8s-operators/placement-operator:v0.0.1}"
 MARIADB_IMAGE="${MARIADB_IMAGE:-quay.io/openstack-k8s-operators/mariadb-operator:v0.0.1}"
+OVN_IMAGE="${OVN_IMAGE:-quay.io/openstack-k8s-operators/ovn-operator:v0.0.1}"
 
 # Important extensions
 CSV_EXT="clusterserviceversion.yaml"
@@ -83,7 +84,7 @@ function gen_csv() {
   local csv="${operatorName}.${CSV_EXT}"
 
   # TODO: Use oc to run if cluster is available
-  local containerBuildCmd="$CONTAINER_BUILD_CMD run --rm --entrypoint=/usr/local/bin/csv-generator ${imagePullUrl} ${operatorArgs}"
+  local containerBuildCmd="$CONTAINER_BUILD_CMD run --pull=always --rm --entrypoint=/usr/local/bin/csv-generator ${imagePullUrl} ${operatorArgs}"
 
   eval $containerBuildCmd > $csv || exit 1
 }
@@ -192,6 +193,19 @@ function create_placement_csv() {
   echo "${operatorName}"
 }
 
+function create_ovn_csv() {
+  local operatorName="ovn"
+  local imagePullUrl="${OVN_IMAGE}"
+  local operatorArgs=" \
+    --namespace=${OPERATOR_NAMESPACE} \
+    --csv-version=${CSV_VERSION} \
+    --operator-image-name=${OVN_IMAGE}
+  "
+
+  gen_csv ${operatorName} ${imagePullUrl} ${operatorArgs}
+  echo "${operatorName}"
+}
+
 TEMPDIR=$(mktemp -d) || (echo "Failed to create temp directory" && exit 1)
 pushd $TEMPDIR
 novaCsv="${TEMPDIR}/$(create_nova_csv).${CSV_EXT}"
@@ -202,6 +216,7 @@ heatCsv="${TEMPDIR}/$(create_heat_csv).${CSV_EXT}"
 mariadbCsv="${TEMPDIR}/$(create_mariadb_csv).${CSV_EXT}"
 glanceCsv="${TEMPDIR}/$(create_glance_csv).${CSV_EXT}"
 placementCsv="${TEMPDIR}/$(create_placement_csv).${CSV_EXT}"
+ovnCsv="${TEMPDIR}/$(create_ovn_csv).${CSV_EXT}"
 csvOverrides="${TEMPDIR}/csv_overrides.${CSV_EXT}"
 cat > ${csvOverrides} <<- EOM
 ---
@@ -232,6 +247,7 @@ ${PROJECT_ROOT}/bin/csv-merger \
   --glance-csv="$(<${glanceCsv})" \
   --mariadb-csv="$(<${mariadbCsv})" \
   --placement-csv="$(<${placementCsv})" \
+  --ovn-csv="$(<${ovnCsv})" \
   --csv-version=${CSV_VERSION} \
   --replaces-csv-version=${REPLACES_CSV_VERSION} \
   --spec-displayname="OpenStack Cluster Operator" \
@@ -250,5 +266,6 @@ copy_deployment_specs "keystone-operator" "${KEYSTONE_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "mariadb-operator" "${MARIADB_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "glance-operator" "${GLANCE_IMAGE}" "$CSV_DIR"
 copy_deployment_specs "placement-operator" "${PLACEMENT_IMAGE}" "$CSV_DIR"
+copy_deployment_specs "ovn-operator" "${OVN_IMAGE}" "$CSV_DIR"
 
 rm -rf ${TEMPDIR}
