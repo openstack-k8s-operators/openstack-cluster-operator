@@ -124,6 +124,7 @@ func getOperatorRules() *[]rbacv1.PolicyRule {
 			Resources: []string{
 				"*",
 				"controlplanes",
+				"openstackclients",
 			},
 			Verbs: []string{
 				"*",
@@ -254,6 +255,19 @@ func GetCSVBase(name, namespace, displayName, description, image, replaces strin
 			},
 		},
 		map[string]interface{}{
+			"apiVersion": "controlplane.openstack.org/v1beta1",
+			"kind":       "OpenStackClient",
+			"metadata": map[string]string{
+				"name":      "openstackclient",
+				"namespace": namespace,
+			},
+			"spec": map[string]interface{}{
+				"containerImage":        "quay.io/openstack-k8s-operators/tripleo-deploy",
+				"openStackConfigMap":    "openstack-config",
+				"openStackConfigSecret": "openstack-config-secret",
+			},
+		},
+		map[string]interface{}{
 			"apiVersion": "compute-node.openstack.org/v1alpha1",
 			"kind":       "ComputeNodeOpenStack",
 			"metadata": map[string]string{
@@ -373,6 +387,13 @@ func GetCSVBase(name, namespace, displayName, description, image, replaces strin
 						Kind:        "ControlPlane",
 						DisplayName: "Control Plane",
 						Description: "Represents a Control Plane Deployment for the " + crdDisplay,
+					},
+					csvv1alpha1.CRDDescription{
+						Name:        "openstackclients.controlplane.openstack.org",
+						Version:     "v1beta1",
+						Kind:        "OpenStackClient",
+						DisplayName: "OpenStack Client",
+						Description: "Represents a OpenStack Client Deployment for the " + crdDisplay,
 					},
 				},
 				Required: []csvv1alpha1.CRDDescription{},

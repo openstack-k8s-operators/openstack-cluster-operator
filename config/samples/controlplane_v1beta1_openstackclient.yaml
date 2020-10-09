@@ -1,0 +1,9 @@
+apiVersion: controlplane.openstack.org/v1beta1
+kind: OpenStackClient
+metadata:
+  name: openstackclient-sample
+  namespace: openstack
+spec:
+  containerImage: quay.io/openstack-k8s-operators/tripleo-deploy
+  openStackConfigMap: openstack-config
+  openStackConfigSecret: openstack-config-secret
