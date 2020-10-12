@@ -77,6 +77,7 @@ var (
 	glanceCsv           = flag.String("glance-csv", "", "Glance CSV string")
 	mariadbCsv          = flag.String("mariadb-csv", "", "Mariadb CSV string")
 	placementCsv        = flag.String("placement-csv", "", "Placement CSV string")
+	ovnCsv              = flag.String("ovn-csv", "", "OVN CSV string")
 	operatorImage       = flag.String("operator-image-name", "", "OpenStack Cluster Operator image")
 	csvVersion          = flag.String("csv-version", "", "CSV version")
 	replacesCsvVersion  = flag.String("replaces-csv-version", "", "CSV version to replace")
@@ -215,6 +216,7 @@ func main() {
 			*glanceCsv,
 			*mariadbCsv,
 			*placementCsv,
+			*ovnCsv,
 		}
 
 		version := semver.MustParse(*csvVersion)
