@@ -127,6 +127,15 @@ func (r *ControlPlaneReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	}
 	objs = append(objs, manifests...)
 
+	// Generate the Cinder objects
+	// TODO: how to handle adding additional cinder-volume services using openstack-cluster-operator
+	manifests, err = bindatautil.RenderDir(filepath.Join(ManifestPath, "cinder"), &data)
+	if err != nil {
+		ctrl.Log.Error(err, "Failed to render cinder manifests : %v")
+		return ctrl.Result{}, err
+	}
+	objs = append(objs, manifests...)
+
 	// Generate the Nova objects
 	// TODO: how to handle adding additional cells using openstack-cluster-operator
 	manifests, err = bindatautil.RenderDir(filepath.Join(ManifestPath, "nova"), &data)
@@ -179,6 +188,10 @@ func getRenderData(ctx context.Context, client client.Client, instance *controlp
 	data.Data["NovaMetadataReplicas"] = instance.Spec.Nova.NovaMetadataReplicas
 	data.Data["NovaNoVNCProxyReplicas"] = instance.Spec.Nova.NovaNoVNCProxyReplicas
 	data.Data["NovaSchedulerReplicas"] = instance.Spec.Nova.NovaSchedulerReplicas
+	data.Data["CinderAPIReplicas"] = instance.Spec.Cinder.CinderAPIReplicas
+	data.Data["CinderBackupReplicas"] = instance.Spec.Cinder.CinderBackupReplicas
+	data.Data["CinderSchedulerReplicas"] = instance.Spec.Cinder.CinderSchedulerReplicas
+	data.Data["CinderVolumeReplicas"] = instance.Spec.Cinder.CinderVolumeReplicas
 	data.Data["Namespace"] = instance.Namespace
 	data.Data["StorageClass"] = instance.Spec.StorageClass
 	return data, nil

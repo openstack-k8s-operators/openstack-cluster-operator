@@ -198,6 +198,22 @@ func getOperatorRules() *[]rbacv1.PolicyRule {
 		},
 		{
 			APIGroups: []string{
+				"cinder.openstack.org",
+			},
+			Resources: []string{
+				"*",
+				"cinders",
+				"cinderapis",
+				"cinderbackups",
+				"cinderschedulers",
+				"cindervolumes",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
+		{
+			APIGroups: []string{
 				"interconnectedcloud.github.io",
 			},
 			Resources: []string{
@@ -274,6 +290,19 @@ func GetCSVBase(name, namespace, displayName, description, image, replaces strin
 				},
 				"placement": map[string]interface{}{
 					"replicas": 1,
+				},
+				"nova": map[string]interface{}{
+					"novaAPIReplicas":        1,
+					"novaSchedulerReplicas":  1,
+					"novaConductorReplicas":  1,
+					"novaMetadataReplicas":   1,
+					"novaNoVNCProxyReplicas": 1,
+				},
+				"cinder": map[string]interface{}{
+					"cinderAPIReplicas":       1,
+					"cinderSchedulerReplicas": 1,
+					"cinderBackupReplicas":    1,
+					"cinderVolumeReplicas":    1,
 				},
 				"storage_class": "host-nfs-storageclass",
 			},
