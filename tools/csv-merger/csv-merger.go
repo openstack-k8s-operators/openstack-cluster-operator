@@ -349,11 +349,11 @@ func main() {
 				DisplayName: "An instance of AMQ Interconnect",
 			},
 			csvv1alpha1.CRDDescription{
-				Name:        "sriovnetworks.sriovnetwork.openshift.io",
+				Name:        "sriovnetworknodepolicies.sriovnetwork.openshift.io",
 				Version:     "v1",
-				Kind:        "SriovNetwork",
-				Description: "Sriov Network",
-				DisplayName: "An instance of Sriov Network",
+				Kind:        "SriovNetworkNodePolicy",
+				Description: "Sriov Network Node Policy",
+				DisplayName: "An instance of Sriov Network Node Policy",
 			},
 			csvv1alpha1.CRDDescription{
 				Name:        "performanceprofiles.performance.openshift.io",
