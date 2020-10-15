@@ -36,6 +36,23 @@ spec:
         spec:
           description: ControlPlaneSpec defines the desired state of ControlPlane
           properties:
+            cinder:
+              description: Cinder settings
+              properties:
+                cinderAPIReplicas:
+                  description: number of Cinder API replicas
+                  type: integer
+                cinderBackupReplicas:
+                  description: number of Cinder Backup replicas
+                  type: integer
+                cinderSchedulerReplicas:
+                  description: number of Cinder Scheduler replicas
+                  type: integer
+                cinderVolumeReplicas:
+                  description: 'number of Cinder Volume replicas Todo: how to handle
+                    different cinder volume services'
+                  type: integer
+              type: object
             glance:
               description: Glance API settings
               properties:

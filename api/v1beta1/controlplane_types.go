@@ -58,6 +58,19 @@ type NovaSpec struct {
 	NovaNoVNCProxyReplicas int `json:"novaNoVNCProxyReplicas,omitempty"`
 }
 
+// CinderSpec defines the desired state of Cinder Control Plane
+type CinderSpec struct {
+	// number of Cinder API replicas
+	CinderAPIReplicas int `json:"cinderAPIReplicas,omitempty"`
+	// number of Cinder Scheduler replicas
+	CinderSchedulerReplicas int `json:"cinderSchedulerReplicas,omitempty"`
+	// number of Cinder Backup replicas
+	CinderBackupReplicas int `json:"cinderBackupReplicas,omitempty"`
+	// number of Cinder Volume replicas
+	// Todo: how to handle different cinder volume services
+	CinderVolumeReplicas int `json:"cinderVolumeReplicas,omitempty"`
+}
+
 // ControlPlaneSpec defines the desired state of ControlPlane
 type ControlPlaneSpec struct {
 	// storage class to use for storage claims
@@ -72,6 +85,8 @@ type ControlPlaneSpec struct {
 	Interconnect InterconnectSpec `json:"interconnect,omitempty"`
 	// Nova settings
 	Nova NovaSpec `json:"nova,omitempty"`
+	// Cinder settings
+	Cinder CinderSpec `json:"cinder,omitempty"`
 }
 
 // ControlPlaneStatus defines the observed state of ControlPlane
