@@ -248,6 +248,18 @@ func getOperatorRules() *[]rbacv1.PolicyRule {
 				"*",
 			},
 		},
+		{
+			APIGroups: []string{
+				"neutron.openstack.org",
+			},
+			Resources: []string{
+				"*",
+				"neutronapis",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
 	}
 }
 
@@ -303,6 +315,9 @@ func GetCSVBase(name, namespace, displayName, description, image, replaces strin
 					"cinderSchedulerReplicas": 1,
 					"cinderBackupReplicas":    1,
 					"cinderVolumeReplicas":    1,
+				},
+				"neutron": map[string]interface{}{
+					"replicas": 1,
 				},
 				"storage_class": "host-nfs-storageclass",
 			},
