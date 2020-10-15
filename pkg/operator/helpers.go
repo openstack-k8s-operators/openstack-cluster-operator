@@ -214,7 +214,7 @@ func getOperatorRules() *[]rbacv1.PolicyRule {
 			},
 			Resources: []string{
 				"*",
-				"sriovnetworks",
+				"sriovnetworknodepolicies",
 			},
 			Verbs: []string{
 				"*",
