@@ -222,7 +222,7 @@ func getOperatorRules() *[]rbacv1.PolicyRule {
 		},
 		{
 			APIGroups: []string{
-				"performanceprofiles.performance.openshift.io",
+				"performance.openshift.io",
 			},
 			Resources: []string{
 				"*",
