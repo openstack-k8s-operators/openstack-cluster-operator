@@ -1,0 +1,12 @@
+apiVersion: neutron.openstack.org/v1beta1
+kind: NeutronAPI
+metadata:
+  name: neutronapi
+  namespace: {{ .Namespace }}
+spec:
+  databaseHostname: mariadb
+  containerImage: tripleotrain/rhel-binary-neutron-server-ovn:current-tripleo
+  replicas: {{ .NeutronAPIReplicas }}
+  neutronSecret: neutron-secret
+  novaSecret: nova-secret
+  ovnConnectionConfigMap: ovn-connection

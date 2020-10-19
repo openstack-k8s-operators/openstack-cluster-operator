@@ -71,6 +71,12 @@ type CinderSpec struct {
 	CinderVolumeReplicas int `json:"cinderVolumeReplicas,omitempty"`
 }
 
+// NeutronSpec defines the desired state of NeutronAPI
+type NeutronSpec struct {
+	// number of Neutron API replicas
+	Replicas int `json:"replicas,omitempty"`
+}
+
 // ControlPlaneSpec defines the desired state of ControlPlane
 type ControlPlaneSpec struct {
 	// storage class to use for storage claims
@@ -87,6 +93,8 @@ type ControlPlaneSpec struct {
 	Nova NovaSpec `json:"nova,omitempty"`
 	// Cinder settings
 	Cinder CinderSpec `json:"cinder,omitempty"`
+	// Neutron settings
+	Neutron NeutronSpec `json:"neutron,omitempty"`
 }
 
 // ControlPlaneStatus defines the observed state of ControlPlane

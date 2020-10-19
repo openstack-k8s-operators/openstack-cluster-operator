@@ -192,6 +192,7 @@ func getRenderData(ctx context.Context, client client.Client, instance *controlp
 	data.Data["CinderBackupReplicas"] = instance.Spec.Cinder.CinderBackupReplicas
 	data.Data["CinderSchedulerReplicas"] = instance.Spec.Cinder.CinderSchedulerReplicas
 	data.Data["CinderVolumeReplicas"] = instance.Spec.Cinder.CinderVolumeReplicas
+	data.Data["NeutronAPIReplicas"] = instance.Spec.Neutron.Replicas
 	data.Data["Namespace"] = instance.Namespace
 	data.Data["StorageClass"] = instance.Spec.StorageClass
 	return data, nil

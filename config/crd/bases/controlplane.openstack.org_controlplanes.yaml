@@ -74,6 +74,13 @@ spec:
                   description: number of Keystone API replicas
                   type: integer
               type: object
+            neutron:
+              description: Neutron settings
+              properties:
+                replicas:
+                  description: number of Neutron API replicas
+                  type: integer
+              type: object
             nova:
               description: Nova settings
               properties:
