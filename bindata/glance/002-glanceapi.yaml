@@ -9,5 +9,5 @@ spec:
   replicas: {{ .GlanceReplicas }}
   storageClass: {{ .StorageClass }}
   storageRequest: 10G
-  containerImage: docker.io/tripleomaster/centos-binary-glance-api:current-tripleo
+  containerImage: quay.io/tripleotrain/centos-binary-glance-api:current-tripleo
   secret: glance-secret

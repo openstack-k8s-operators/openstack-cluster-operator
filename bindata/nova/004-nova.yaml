@@ -12,16 +12,16 @@ spec:
   placementSecret: placement-secret
   neutronSecret: neutron-secret
   transportURLSecret: nova-transport-url
-  novaAPIContainerImage: docker.io/tripleomaster/centos-binary-nova-api:current-tripleo
-  novaSchedulerContainerImage: docker.io/tripleomaster/centos-binary-nova-scheduler:current-tripleo
-  novaConductorContainerImage: docker.io/tripleomaster/centos-binary-nova-conductor:current-tripleo
+  novaAPIContainerImage: quay.io/tripleotrain/centos-binary-nova-api:current-tripleo
+  novaSchedulerContainerImage: quay.io/tripleotrain/centos-binary-nova-scheduler:current-tripleo
+  novaConductorContainerImage: quay.io/tripleotrain/centos-binary-nova-conductor:current-tripleo
   cells:
   - name: cell1
     databaseHostname: mariadb
     transportURLSecret: nova-cell1-transport-url
-    novaConductorContainerImage: docker.io/tripleomaster/centos-binary-nova-conductor:current-tripleo
-    novaMetadataContainerImage: docker.io/tripleomaster/centos-binary-nova-api:current-tripleo
-    novaNoVNCProxyContainerImage: docker.io/tripleomaster/centos-binary-nova-novncproxy:current-tripleo
+    novaConductorContainerImage: quay.io/tripleotrain/centos-binary-nova-conductor:current-tripleo
+    novaMetadataContainerImage: quay.io/tripleotrain/centos-binary-nova-api:current-tripleo
+    novaNoVNCProxyContainerImage: quay.io/tripleotrain/centos-binary-nova-novncproxy:current-tripleo
     novaConductorReplicas: {{ .NovaConductorReplicas }}
     novaMetadataReplicas: {{ .NovaMetadataReplicas }}
     novaNoVNCProxyReplicas: {{ .NovaNoVNCProxyReplicas }}
