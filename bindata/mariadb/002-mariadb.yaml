@@ -7,4 +7,4 @@ spec:
   secret: mariadb-secret
   storageClass: {{ .StorageClass }}
   storageRequest: 10G
-  containerImage: docker.io/tripleomaster/centos-binary-mariadb:current-tripleo
+  containerImage: quay.io/tripleotrain/centos-binary-mariadb:current-tripleo

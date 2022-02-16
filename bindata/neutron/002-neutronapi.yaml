@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Namespace }}
 spec:
   databaseHostname: mariadb
-  containerImage: tripleotrain/rhel-binary-neutron-server-ovn:current-tripleo
+  containerImage: quay.io/tripleotrain/centos-binary-neutron-server-ovn:current-tripleo
   replicas: {{ .NeutronAPIReplicas }}
   neutronSecret: neutron-secret
   novaSecret: nova-secret

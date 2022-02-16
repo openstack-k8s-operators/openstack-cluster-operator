@@ -12,13 +12,13 @@ spec:
   cinderBackupNodeSelectorRoleName: worker
   cinderSecret: cinder-secret
   novaSecret: nova-secret
-  cinderAPIContainerImage: docker.io/tripleomaster/centos-binary-cinder-api:current-tripleo
-  cinderSchedulerContainerImage: docker.io/tripleomaster/centos-binary-cinder-scheduler:current-tripleo
-  cinderBackupContainerImage: docker.io/tripleomaster/centos-binary-cinder-backup:current-tripleo
+  cinderAPIContainerImage: quay.io/tripleotrain/centos-binary-cinder-api:current-tripleo
+  cinderSchedulerContainerImage: quay.io/tripleotrain/centos-binary-cinder-scheduler:current-tripleo
+  cinderBackupContainerImage: quay.io/tripleotrain/centos-binary-cinder-backup:current-tripleo
   cinderVolumes:
   - name: volume1
     databaseHostname: mariadb
-    cinderVolumeContainerImage: docker.io/tripleomaster/centos-binary-cinder-volume:current-tripleo
+    cinderVolumeContainerImage: quay.io/tripleotrain/centos-binary-cinder-volume:current-tripleo
     cinderVolumeReplicas: {{ .CinderVolumeReplicas }}
     // TODO: for now hard code node selector to generig worker nodes
     cinderVolumeNodeSelectorRoleName: worker

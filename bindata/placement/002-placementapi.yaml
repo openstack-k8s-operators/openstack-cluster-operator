@@ -7,5 +7,5 @@ spec:
   # Add fields here
   databaseHostname: mariadb
   replicas: {{ .PlacementReplicas }}
-  containerImage: docker.io/tripleomaster/centos-binary-placement-api:current-tripleo
+  containerImage: quay.io/tripleotrain/centos-binary-placement-api:current-tripleo
   secret: placement-secret

@@ -4,7 +4,7 @@ metadata:
   name: keystone
   namespace: {{ .Namespace }}
 spec:
-  containerImage: docker.io/tripleomaster/centos-binary-keystone:current-tripleo
+  containerImage: quay.io/tripleotrain/centos-binary-keystone:current-tripleo
   replicas: {{ .KeystoneReplicas }}
   databaseHostname: mariadb
   secret: keystone-secret
